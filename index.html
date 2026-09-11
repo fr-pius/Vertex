@@ -1,437 +1,592 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alce Vertex</title>
 
-    <title>Alce Vertex</title>
+<style>
+    * {
+        box-sizing: border-box;
+    }
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #10251d;
+        color: #e8eee9;
+        height: 100vh;
+        overflow: hidden;
+    }
 
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: #102018;
-            color: #e8eee9;
-        }
+    .app {
+        display: flex;
+        height: 100vh;
+    }
 
-        /* =========================
-           ESTRUTURA PRINCIPAL
-           ========================= */
+    /* =========================
+       SIDEBAR
+       ========================= */
 
-        .app {
-            display: flex;
-            height: 100vh;
-            overflow: hidden;
-        }
+    .sidebar {
+        width: 270px;
+        background: #0b1b15;
+        border-right: 1px solid #294538;
+        padding: 24px 18px;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+    }
 
-        /* =========================
-           BARRA LATERAL
-           ========================= */
+    .brand {
+        text-align: center;
+        margin-bottom: 28px;
+    }
 
+    .brand-title {
+        font-size: 30px;
+        font-weight: bold;
+        color: #d8e4dc;
+        letter-spacing: 1px;
+    }
+
+    .brand-subtitle {
+        margin-top: 3px;
+        color: #8eab9b;
+        font-size: 13px;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+    }
+
+    .sidebar-section {
+        margin-bottom: 22px;
+    }
+
+    .sidebar-title {
+        color: #718c7d;
+        font-size: 11px;
+        font-weight: bold;
+        letter-spacing: 1.5px;
+        margin: 0 0 8px 10px;
+        text-transform: uppercase;
+    }
+
+    .nav-item {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        color: #b9c9c0;
+        padding: 10px 12px;
+        text-align: left;
+        border-radius: 7px;
+        cursor: pointer;
+        font-size: 14px;
+        margin-bottom: 2px;
+    }
+
+    .nav-item:hover {
+        background: #19372b;
+        color: #ffffff;
+    }
+
+    .nav-item.active {
+        background: #214b39;
+        color: #ffffff;
+    }
+
+    .folder {
+        margin-bottom: 4px;
+    }
+
+    .folder-header {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 9px;
+        border-radius: 7px;
+        cursor: pointer;
+        color: #c6d4cc;
+        font-size: 14px;
+    }
+
+    .folder-header:hover {
+        background: #19372b;
+    }
+
+    .folder-arrow {
+        width: 12px;
+        color: #7e9a8a;
+        font-size: 11px;
+    }
+
+    .folder-lists {
+        margin-left: 24px;
+        margin-top: 2px;
+    }
+
+    .list-item {
+        padding: 7px 9px;
+        color: #91a99c;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .list-item:hover {
+        background: #19372b;
+        color: #dce7e1;
+    }
+
+    .sidebar-bottom {
+        margin-top: auto;
+        padding-top: 15px;
+        border-top: 1px solid #20392f;
+    }
+
+    .bottom-button {
+        width: 100%;
+        background: transparent;
+        border: 0;
+        color: #a9beb1;
+        padding: 10px 12px;
+        text-align: left;
+        border-radius: 7px;
+        cursor: pointer;
+        font-size: 13px;
+        margin-bottom: 3px;
+    }
+
+    .bottom-button:hover {
+        background: #19372b;
+        color: #ffffff;
+    }
+
+    /* =========================
+       MAIN
+       ========================= */
+
+    .main {
+        flex: 1;
+        min-width: 0;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .topbar {
+        height: 68px;
+        border-bottom: 1px solid #294538;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 28px;
+        flex-shrink: 0;
+    }
+
+    .page-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #e3ebe6;
+    }
+
+    .topbar-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .view-button {
+        border: 1px solid #365748;
+        background: #142c22;
+        color: #b9cbbf;
+        border-radius: 7px;
+        padding: 8px 12px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .view-button:hover {
+        background: #1b3a2d;
+        color: #ffffff;
+    }
+
+    .content {
+        flex: 1;
+        overflow-y: auto;
+        padding: 28px;
+    }
+
+    .tasks {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    /* =========================
+       TASK CARD
+       ========================= */
+
+    .task {
+        position: relative;
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        min-height: 64px;
+        padding: 12px 14px;
+        margin-bottom: 8px;
+        background: #142c22;
+        border: 1px solid #294538;
+        border-radius: 9px;
+        transition: background 0.15s, border-color 0.15s;
+    }
+
+    .task:hover {
+        background: #19372b;
+        border-color: #3a5b4b;
+    }
+
+    .task-checkbox {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        cursor: pointer;
+        accent-color: #71957f;
+    }
+
+    .task-main {
+        flex: 1;
+        min-width: 0;
+        cursor: pointer;
+    }
+
+    .task-name {
+        color: #e3ebe6;
+        font-size: 15px;
+        line-height: 1.35;
+        word-break: break-word;
+    }
+
+    .task.completed .task-name {
+        color: #71887c;
+        text-decoration: line-through;
+    }
+
+    .task-meta {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 7px;
+    }
+
+    /* =========================
+       ETIQUETAS
+       ========================= */
+
+    .tag {
+        display: inline-flex;
+        align-items: center;
+        min-height: 22px;
+        padding: 2px 8px;
+        border-radius: 5px;
+        font-size: 10px;
+        font-weight: bold;
+        letter-spacing: 0.7px;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+    /* Status: aspecto de estado */
+
+    .tag-status {
+        border: 1px solid #526d5e;
+        background: #1b3328;
+        color: #bdd0c4;
+        border-radius: 4px;
+    }
+
+    .tag-status.projeto {
+        border-style: double;
+        background: #26372e;
+        color: #d0d4b9;
+    }
+
+    .tag-status.concluida {
+        background: #1c2b24;
+        border-color: #3c5146;
+        color: #789184;
+    }
+
+    /* Recorrência: aspecto diferente */
+
+    .tag-recurrence {
+        border: 0;
+        background: transparent;
+        color: #91ae9e;
+        padding-left: 2px;
+        padding-right: 3px;
+        letter-spacing: 0.4px;
+    }
+
+    .tag-recurrence::first-letter {
+        font-size: 14px;
+    }
+
+    .task-date {
+        color: #667f72;
+        font-size: 11px;
+        margin-left: 3px;
+    }
+
+    /* =========================
+       TRÊS PONTOS
+       ========================= */
+
+    .task-menu-button {
+        width: 32px;
+        height: 36px;
+        flex-shrink: 0;
+        border: 0;
+        background: transparent;
+        color: #789286;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 22px;
+        line-height: 1;
+        padding: 0;
+    }
+
+    .task-menu-button:hover {
+        background: #244638;
+        color: #ffffff;
+    }
+
+    .task-menu {
+        position: absolute;
+        right: 12px;
+        top: 48px;
+        width: 165px;
+        background: #10251d;
+        border: 1px solid #3a594b;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+        z-index: 20;
+        padding: 5px;
+    }
+
+    .task-menu button {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        color: #c2d0c8;
+        padding: 9px 10px;
+        text-align: left;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .task-menu button:hover {
+        background: #1c3a2d;
+        color: #ffffff;
+    }
+
+    .task-menu button.danger:hover {
+        background: #422b2b;
+        color: #f0c8c8;
+    }
+
+    /* =========================
+       VIEW MENU
+       ========================= */
+
+    .view-menu-container {
+        position: relative;
+    }
+
+    .view-menu {
+        position: absolute;
+        right: 0;
+        top: 43px;
+        width: 205px;
+        background: #10251d;
+        border: 1px solid #3a594b;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+        z-index: 30;
+        padding: 8px;
+    }
+
+    .view-menu-title {
+        color: #718c7d;
+        font-size: 10px;
+        font-weight: bold;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+        padding: 5px 8px 8px;
+    }
+
+    .view-option {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px;
+        border-radius: 5px;
+        cursor: pointer;
+        color: #c2d0c8;
+        font-size: 13px;
+    }
+
+    .view-option:hover {
+        background: #1c3a2d;
+    }
+
+    .view-option input {
+        accent-color: #71957f;
+    }
+
+    /* =========================
+       MODAL
+       ========================= */
+
+    .modal-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.58);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 100;
+        padding: 20px;
+    }
+
+    .modal {
+        width: min(520px, 100%);
+        max-height: 90vh;
+        overflow-y: auto;
+        background: #10251d;
+        border: 1px solid #3b5b4c;
+        border-radius: 11px;
+        box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+        padding: 24px;
+    }
+
+    .modal h2 {
+        margin: 0 0 20px;
+        color: #e4ece7;
+        font-size: 19px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        color: #9eb3a7;
+        font-size: 12px;
+        margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        border: 1px solid #365748;
+        background: #0c1e17;
+        color: #dce7e1;
+        border-radius: 6px;
+        padding: 10px 11px;
+        outline: none;
+        font-size: 14px;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+        border-color: #638675;
+    }
+
+    .modal-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+        margin-top: 22px;
+    }
+
+    .modal-button {
+        border: 1px solid #3c5c4d;
+        background: #183428;
+        color: #c9d8cf;
+        padding: 9px 15px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .modal-button:hover {
+        background: #244638;
+        color: #ffffff;
+    }
+
+    .modal-button.primary {
+        background: #315d47;
+        border-color: #4b755f;
+        color: #ffffff;
+    }
+
+    .modal-button.primary:hover {
+        background: #3d7056;
+    }
+
+    .hidden {
+        display: none !important;
+    }
+
+    .empty {
+        text-align: center;
+        color: #71897b;
+        padding: 60px 20px;
+        font-size: 14px;
+    }
+
+    /* =========================
+       RESPONSIVO
+       ========================= */
+
+    @media (max-width: 760px) {
         .sidebar {
-            width: 270px;
-            background: #142a20;
-            border-right: 1px solid #294536;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            flex-shrink: 0;
-        }
-
-        .logo {
-            padding: 24px 22px 20px;
-            border-bottom: 1px solid #294536;
-        }
-
-        .logo-title {
-            font-size: 25px;
-            font-weight: 700;
-            margin: 0;
-            color: #f0f5f1;
-        }
-
-        .logo-subtitle {
-            font-size: 13px;
-            color: #9db3a5;
-            margin-top: 3px;
-        }
-
-        .sidebar-section {
-            padding: 18px 12px 6px;
-        }
-
-        .section-title {
-            padding: 0 10px 8px;
-            font-size: 11px;
-            font-weight: 700;
-            color: #789181;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-        }
-
-        .sidebar-button {
-            width: 100%;
-            border: none;
-            background: transparent;
-            padding: 9px 10px;
-            border-radius: 6px;
-            text-align: left;
-            font-size: 14px;
-            cursor: pointer;
-            color: #d6e2da;
-        }
-
-        .sidebar-button:hover {
-            background: #1d392b;
-        }
-
-        .sidebar-button.active {
-            background: #28543d;
-            color: #ffffff;
-            font-weight: 600;
-        }
-
-        .organization {
-            padding-bottom: 15px;
-        }
-
-        .folder {
-            margin-bottom: 3px;
-        }
-
-        .folder-header {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            width: 100%;
-            border: none;
-            background: transparent;
-            padding: 8px 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            text-align: left;
-            font-size: 14px;
-            color: #d6e2da;
-        }
-
-        .folder-header:hover {
-            background: #1d392b;
-        }
-
-        .folder-arrow {
-            width: 15px;
-            font-size: 11px;
-            color: #91a99a;
-        }
-
-        .folder-name {
-            flex: 1;
-        }
-
-        .folder-content {
-            padding-left: 24px;
-        }
-
-        .list-button {
-            display: block;
-            width: 100%;
-            border: none;
-            background: transparent;
-            padding: 7px 10px;
-            border-radius: 5px;
-            text-align: left;
-            font-size: 13px;
-            color: #aebfb4;
-            cursor: pointer;
-        }
-
-        .list-button:hover {
-            background: #1d392b;
-            color: #ffffff;
-        }
-
-        .sidebar-actions {
-            margin-top: auto;
-            border-top: 1px solid #294536;
-            padding: 12px;
-        }
-
-        .action-button {
-            width: 100%;
-            border: none;
-            background: transparent;
-            padding: 8px 10px;
-            text-align: left;
-            border-radius: 6px;
-            cursor: pointer;
-            color: #aebfb4;
-            font-size: 13px;
-        }
-
-        .action-button:hover {
-            background: #1d392b;
-            color: #ffffff;
-        }
-
-        /* =========================
-           ÁREA PRINCIPAL
-           ========================= */
-
-        .main {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-            background: #102018;
-        }
-
-        .topbar {
-            height: 70px;
-            background: #173024;
-            border-bottom: 1px solid #294536;
-            display: flex;
-            align-items: center;
-            padding: 0 28px;
-            gap: 18px;
-        }
-
-        .page-title {
-            font-size: 20px;
-            font-weight: 600;
-            flex: 1;
-            color: #edf3ef;
-        }
-
-        .search {
-            width: 270px;
-            padding: 9px 12px;
-            border: 1px solid #3b5a49;
-            background: #102018;
-            color: #e8eee9;
-            border-radius: 6px;
-            outline: none;
-            font-size: 14px;
-        }
-
-        .search::placeholder {
-            color: #789181;
-        }
-
-        .search:focus {
-            border-color: #628c73;
+            width: 220px;
         }
 
         .content {
-            flex: 1;
-            overflow-y: auto;
-            padding: 28px;
+            padding: 18px;
         }
 
-        .task-list {
-            max-width: 900px;
+        .topbar {
+            padding: 0 18px;
+        }
+    }
+
+    @media (max-width: 600px) {
+        .sidebar {
+            width: 190px;
+            padding: 18px 12px;
         }
 
-        .empty-message {
-            padding: 40px 10px;
-            color: #789181;
-            font-size: 14px;
+        .brand-title {
+            font-size: 25px;
         }
 
-        /* =========================
-           TAREFAS
-           ========================= */
+        .topbar {
+            height: 60px;
+        }
+
+        .page-title {
+            font-size: 17px;
+        }
 
         .task {
-            background: #173024;
-            border: 1px solid #294536;
-            border-radius: 7px;
-            margin-bottom: 8px;
-            padding: 14px 16px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
+            padding: 11px;
         }
-
-        .task:hover {
-            border-color: #456b55;
-            background: #193529;
-        }
-
-        .task-checkbox {
-            width: 18px;
-            height: 18px;
-            margin-top: 2px;
-            cursor: pointer;
-            flex-shrink: 0;
-            accent-color: #4f815f;
-        }
-
-        .task-body {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .task-name {
-            font-size: 15px;
-            font-weight: 500;
-            color: #e8eee9;
-        }
-
-        .task-meta {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            margin-top: 7px;
-        }
-
-        .task-tag {
-            font-size: 11px;
-            color: #a9bbaf;
-            background: #203b2d;
-            padding: 3px 7px;
-            border-radius: 4px;
-        }
-
-        .task-date {
-            font-size: 11px;
-            color: #789181;
-        }
-
-        .completed .task-name {
-            text-decoration: line-through;
-            color: #71867a;
-        }
-
-        /* =========================
-           MODAL
-           ========================= */
-
-        .modal-background {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 10, 5, 0.70);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-        }
-
-        .modal-background.visible {
-            display: flex;
-        }
-
-        .modal {
-            width: 420px;
-            max-width: calc(100vw - 30px);
-            background: #173024;
-            border: 1px solid #365744;
-            border-radius: 9px;
-            padding: 24px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
-        }
-
-        .modal h2 {
-            margin: 0 0 18px;
-            font-size: 19px;
-            color: #edf3ef;
-        }
-
-        .modal label {
-            display: block;
-            margin-bottom: 6px;
-            font-size: 13px;
-            color: #aebfb4;
-        }
-
-        .modal input,
-        .modal select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #3b5a49;
-            background: #102018;
-            color: #e8eee9;
-            border-radius: 5px;
-            font-size: 14px;
-            margin-bottom: 16px;
-        }
-
-        .modal input:focus,
-        .modal select:focus {
-            outline: none;
-            border-color: #628c73;
-        }
-
-        .modal-buttons {
-            display: flex;
-            justify-content: flex-end;
-            gap: 8px;
-        }
-
-        .modal-button {
-            border: 1px solid #3b5a49;
-            background: #1d392b;
-            color: #d6e2da;
-            padding: 8px 14px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .modal-button:hover {
-            background: #28543d;
-        }
-
-        .modal-button.primary {
-            background: #3d6b4c;
-            color: white;
-            border-color: #3d6b4c;
-        }
-
-        .modal-button.primary:hover {
-            background: #4a7c5a;
-        }
-
-        /* =========================
-           RESPONSIVO
-           ========================= */
-
-        @media (max-width: 700px) {
-
-            .sidebar {
-                width: 220px;
-            }
-
-            .topbar {
-                padding: 0 15px;
-            }
-
-            .content {
-                padding: 18px 15px;
-            }
-
-            .search {
-                width: 170px;
-            }
-        }
-
-        @media (max-width: 520px) {
-
-            .sidebar {
-                width: 190px;
-            }
-
-            .search {
-                width: 130px;
-            }
-
-            .page-title {
-                font-size: 17px;
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 
 <body>
@@ -439,65 +594,60 @@
 <div class="app">
 
     <!-- =========================
-         BARRA LATERAL
+         SIDEBAR
          ========================= -->
 
     <aside class="sidebar">
 
-        <div class="logo">
-            <div class="logo-title">Alce</div>
-            <div class="logo-subtitle">Vertex</div>
+        <div class="brand">
+            <div class="brand-title">Alce</div>
+            <div class="brand-subtitle">Vertex</div>
         </div>
 
         <div class="sidebar-section">
+            <div class="sidebar-title">Tarefas</div>
 
-            <div class="section-title">Tarefas</div>
-
-            <button class="sidebar-button active" data-filter="all">
+            <button class="nav-item active" data-view="all" onclick="changeView('all', this)">
                 Todas
             </button>
 
-            <button class="sidebar-button" data-filter="today">
+            <button class="nav-item" data-view="today" onclick="changeView('today', this)">
                 Hoje
             </button>
 
-            <button class="sidebar-button" data-filter="upcoming">
+            <button class="nav-item" data-view="upcoming" onclick="changeView('upcoming', this)">
                 Próximas
             </button>
 
-            <button class="sidebar-button" data-filter="overdue">
+            <button class="nav-item" data-view="overdue" onclick="changeView('overdue', this)">
                 Atrasadas
             </button>
 
-            <button class="sidebar-button" data-filter="completed">
+            <button class="nav-item" data-view="completed" onclick="changeView('completed', this)">
                 Concluídas
             </button>
-
         </div>
 
-        <div class="sidebar-section organization">
-
-            <div class="section-title">Organização</div>
-
-            <div id="organizationTree"></div>
-
+        <div class="sidebar-section">
+            <div class="sidebar-title">Organização</div>
+            <div id="organization"></div>
         </div>
 
-        <div class="sidebar-actions">
+        <div class="sidebar-bottom">
 
-            <button class="action-button" onclick="openModal('task')">
-                + Nova tarefa
+            <button class="bottom-button" onclick="openNewTaskModal()">
+                ＋ Nova tarefa
             </button>
 
-            <button class="action-button" onclick="openModal('list')">
-                + Nova lista
+            <button class="bottom-button" onclick="openNewListModal()">
+                ＋ Nova lista
             </button>
 
-            <button class="action-button" onclick="openModal('folder')">
-                + Nova pasta
+            <button class="bottom-button" onclick="openNewFolderModal()">
+                ＋ Nova pasta
             </button>
 
-            <button class="action-button">
+            <button class="bottom-button" onclick="showSettings()">
                 ⚙ Configurações
             </button>
 
@@ -505,9 +655,8 @@
 
     </aside>
 
-
     <!-- =========================
-         ÁREA PRINCIPAL
+         MAIN
          ========================= -->
 
     <main class="main">
@@ -515,22 +664,63 @@
         <header class="topbar">
 
             <div class="page-title" id="pageTitle">
-                Todas as tarefas
+                Todas
             </div>
 
-            <input
-                type="search"
-                class="search"
-                id="searchInput"
-                placeholder="Pesquisar..."
-            >
+            <div class="topbar-actions">
+
+                <div class="view-menu-container">
+
+                    <button class="view-button" onclick="toggleViewMenu()">
+                        Visualização ▾
+                    </button>
+
+                    <div id="viewMenu" class="view-menu hidden">
+
+                        <div class="view-menu-title">
+                            Etiquetas visíveis
+                        </div>
+
+                        <label class="view-option">
+                            <input
+                                type="checkbox"
+                                id="showStatus"
+                                checked
+                                onchange="changeVisibility('status', this.checked)"
+                            >
+                            Status
+                        </label>
+
+                        <label class="view-option">
+                            <input
+                                type="checkbox"
+                                id="showRecurrence"
+                                checked
+                                onchange="changeVisibility('recurrence', this.checked)"
+                            >
+                            Recorrência
+                        </label>
+
+                        <label class="view-option">
+                            <input
+                                type="checkbox"
+                                id="showDate"
+                                checked
+                                onchange="changeVisibility('date', this.checked)"
+                            >
+                            Data
+                        </label>
+
+                    </div>
+
+                </div>
+
+            </div>
 
         </header>
 
         <section class="content">
-
-            <div class="task-list" id="taskList"></div>
-
+            <div class="tasks" id="tasks"></div>
         </section>
 
     </main>
@@ -539,18 +729,87 @@
 
 
 <!-- =========================
-     MODAL
+     MODAL DE TAREFA
      ========================= -->
 
-<div class="modal-background" id="modalBackground">
+<div id="taskModal" class="modal-overlay hidden">
 
     <div class="modal">
 
-        <h2 id="modalTitle">Nova tarefa</h2>
+        <h2 id="taskModalTitle">Nova tarefa</h2>
 
-        <div id="modalContent"></div>
+        <div class="form-group">
+            <label for="modalTaskName">Nome da tarefa</label>
+            <input
+                id="modalTaskName"
+                type="text"
+                placeholder="Exemplo: Preparar relatório"
+            >
+        </div>
 
-        <div class="modal-buttons">
+        <div class="form-group">
+            <label for="modalTaskFolder">Pasta</label>
+            <select id="modalTaskFolder" onchange="updateModalLists()"></select>
+        </div>
+
+        <div class="form-group">
+            <label for="modalTaskList">Lista</label>
+            <select id="modalTaskList"></select>
+        </div>
+
+        <div class="form-group">
+            <label for="modalTaskStatus">Status</label>
+
+            <select id="modalTaskStatus">
+                <option value="Pendente">Pendente</option>
+                <option value="Projeto">Projeto</option>
+                <option value="Concluída">Concluída</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="modalTaskRecurrence">Recorrência</label>
+
+            <select
+                id="modalTaskRecurrence"
+                onchange="updateRecurrenceField()"
+            >
+                <option value="Única">Única</option>
+                <option value="Diária">Diária</option>
+                <option value="Semanal">Semanal</option>
+                <option value="Mensal">Mensal</option>
+                <option value="Anual">Anual</option>
+                <option value="X dias">X dias</option>
+            </select>
+        </div>
+
+        <div
+            id="recurrenceDaysContainer"
+            class="form-group hidden"
+        >
+            <label for="modalRecurrenceDays">
+                Intervalo em dias
+            </label>
+
+            <input
+                id="modalRecurrenceDays"
+                type="number"
+                min="1"
+                step="1"
+                placeholder="Exemplo: 15"
+            >
+        </div>
+
+        <div class="form-group">
+            <label for="modalTaskDate">Data</label>
+
+            <input
+                id="modalTaskDate"
+                type="date"
+            >
+        </div>
+
+        <div class="modal-actions">
 
             <button
                 class="modal-button"
@@ -563,7 +822,7 @@
                 class="modal-button primary"
                 onclick="saveModal()"
             >
-                Criar
+                Salvar
             </button>
 
         </div>
@@ -575,1123 +834,1153 @@
 
 <script>
 
-    /* =====================================================
-       PERSISTÊNCIA LOCAL
-       ===================================================== */
+/* =========================================================
+   DADOS
+   ========================================================= */
 
-    const STORAGE_KEY = "alceVertexDataV1";
+const STORAGE_KEY = "alceVertexDataV1";
 
+let folders = [];
+let tasks = [];
 
-    /* =====================================================
-       DADOS INICIAIS
-       ===================================================== */
+let currentView = "all";
+let currentListId = null;
+let editingTaskId = null;
 
-    const defaultFolders = [
-        {
-            id: 1,
-            name: "Exemplo 1",
-            open: true,
-            lists: [
-                { id: 1, name: "Exemplo 1" },
-                { id: 2, name: "Exemplo 2" },
-                { id: 3, name: "Exemplo 3" }
-            ]
-        },
-        {
-            id: 2,
-            name: "Exemplo 2",
-            open: true,
-            lists: [
-                { id: 4, name: "Exemplo 1" },
-                { id: 5, name: "Exemplo 2" }
-            ]
-        },
-        {
-            id: 3,
-            name: "Exemplo 3",
-            open: false,
-            lists: [
-                { id: 6, name: "Exemplo 1" }
-            ]
-        }
-    ];
+let visibility = {
+    status: true,
+    recurrence: true,
+    date: true
+};
 
 
-    function dateString(date) {
+/* =========================================================
+   DATAS
+   ========================================================= */
 
-        return date.toISOString().split("T")[0];
+function formatDateInput(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
 
+    return `${year}-${month}-${day}`;
+}
+
+function today() {
+    return formatDateInput(new Date());
+}
+
+function tomorrow() {
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    return formatDateInput(d);
+}
+
+function yesterday() {
+    const d = new Date();
+    d.setDate(d.getDate() - 1);
+    return formatDateInput(d);
+}
+
+
+/* =========================================================
+   DADOS PADRÃO
+   ========================================================= */
+
+const defaultFolders = [
+    {
+        id: 1,
+        name: "Exemplo 1",
+        open: true,
+        lists: [
+            { id: 1, name: "Exemplo 1" },
+            { id: 2, name: "Exemplo 2" },
+            { id: 3, name: "Exemplo 3" }
+        ]
+    },
+
+    {
+        id: 2,
+        name: "Exemplo 2",
+        open: true,
+        lists: [
+            { id: 4, name: "Exemplo 1" },
+            { id: 5, name: "Exemplo 2" }
+        ]
+    },
+
+    {
+        id: 3,
+        name: "Exemplo 3",
+        open: false,
+        lists: [
+            { id: 6, name: "Exemplo 1" }
+        ]
+    }
+];
+
+
+const defaultTasks = [
+    {
+        id: 1,
+        name: "Exemplo 1",
+        folderId: 1,
+        listId: 1,
+        completed: false,
+        status: "Pendente",
+        recurrence: "Única",
+        recurrenceDays: null,
+        date: today()
+    },
+
+    {
+        id: 2,
+        name: "Exemplo 2",
+        folderId: 1,
+        listId: 2,
+        completed: false,
+        status: "Pendente",
+        recurrence: "Única",
+        recurrenceDays: null,
+        date: today()
+    },
+
+    {
+        id: 3,
+        name: "Exemplo 3",
+        folderId: 2,
+        listId: 4,
+        completed: false,
+        status: "Pendente",
+        recurrence: "Única",
+        recurrenceDays: null,
+        date: tomorrow()
+    },
+
+    {
+        id: 4,
+        name: "Exemplo 4",
+        folderId: 2,
+        listId: 5,
+        completed: false,
+        status: "Pendente",
+        recurrence: "Única",
+        recurrenceDays: null,
+        date: yesterday()
+    },
+
+    {
+        id: 5,
+        name: "Exemplo 5",
+        folderId: 3,
+        listId: 6,
+        completed: true,
+        status: "Concluída",
+        recurrence: "Única",
+        recurrenceDays: null,
+        date: yesterday()
+    }
+];
+
+
+/* =========================================================
+   MIGRAÇÃO
+   ========================================================= */
+
+function migrateTask(task) {
+
+    if (!task.status) {
+        task.status = task.completed
+            ? "Concluída"
+            : "Pendente";
     }
 
-
-    function today() {
-
-        const date = new Date();
-
-        return dateString(date);
-
+    if (!task.recurrence) {
+        task.recurrence = "Única";
     }
 
-
-    function tomorrow() {
-
-        const date = new Date();
-
-        date.setDate(date.getDate() + 1);
-
-        return dateString(date);
-
+    if (!Object.prototype.hasOwnProperty.call(task, "recurrenceDays")) {
+        task.recurrenceDays = null;
     }
 
+    return task;
+}
 
-    function yesterday() {
 
-        const date = new Date();
+/* =========================================================
+   CARREGAR / SALVAR
+   ========================================================= */
 
-        date.setDate(date.getDate() - 1);
+function loadData() {
 
-        return dateString(date);
+    const saved = localStorage.getItem(STORAGE_KEY);
 
+    if (!saved) {
+
+        folders = JSON.parse(JSON.stringify(defaultFolders));
+        tasks = JSON.parse(JSON.stringify(defaultTasks));
+
+        saveData();
+        return;
     }
 
+    try {
 
-    const defaultTasks = [
-        {
-            id: 1,
-            name: "Exemplo 1",
-            folderId: 1,
-            listId: 1,
-            completed: false,
-            status: "Pendente",
-            recurrence: "Única",
-            recurrenceDays: null,
-            date: today()
-        },
-        {
-            id: 2,
-            name: "Exemplo 2",
-            folderId: 1,
-            listId: 2,
-            completed: false,
-            status: "Pendente",
-            recurrence: "Única",
-            recurrenceDays: null,
-            date: today()
-        },
-        {
-            id: 3,
-            name: "Exemplo 3",
-            folderId: 2,
-            listId: 4,
-            completed: false,
-            status: "Pendente",
-            recurrence: "Única",
-            recurrenceDays: null,
-            date: tomorrow()
-        },
-        {
-            id: 4,
-            name: "Exemplo 4",
-            folderId: 2,
-            listId: 5,
-            completed: false,
-            status: "Pendente",
-            recurrence: "Única",
-            recurrenceDays: null,
-            date: yesterday()
-        },
-        {
-            id: 5,
-            name: "Exemplo 5",
-            folderId: 3,
-            listId: 6,
-            completed: true,
-            status: "Concluída",
-            recurrence: "Única",
-            recurrenceDays: null,
-            date: yesterday()
-        }
-    ];
+        const data = JSON.parse(saved);
 
+        folders = data.folders || JSON.parse(JSON.stringify(defaultFolders));
 
-    let folders;
-    let tasks;
-
-
-    /* =====================================================
-       MIGRAÇÃO DOS DADOS ANTIGOS
-       ===================================================== */
-
-    function migrateTask(task) {
-
-        if (!task.status) {
-
-            task.status =
-                task.completed
-                    ? "Concluída"
-                    : "Pendente";
-
-        }
-
-
-        if (!task.recurrence) {
-
-            task.recurrence = "Única";
-
-        }
-
-
-        if (!Object.prototype.hasOwnProperty.call(
-            task,
-            "recurrenceDays"
-        )) {
-
-            task.recurrenceDays = null;
-
-        }
-
-
-        return task;
-
-    }
-
-
-    /* =====================================================
-       CARREGAR / SALVAR DADOS
-       ===================================================== */
-
-    function loadData() {
-
-        const savedData =
-            localStorage.getItem(STORAGE_KEY);
-
-
-        if (!savedData) {
-
-            folders = defaultFolders;
-            tasks = defaultTasks;
-
-            saveData();
-
-            return;
-
-        }
-
-
-        try {
-
-            const data =
-                JSON.parse(savedData);
-
-
-            if (
-                Array.isArray(data.folders) &&
-                Array.isArray(data.tasks)
-            ) {
-
-                folders = data.folders;
-                tasks = data.tasks.map(migrateTask);
-
-                saveData();
-
-            } else {
-
-                folders = defaultFolders;
-                tasks = defaultTasks;
-
-            }
-
-        } catch (error) {
-
-            console.error(
-                "Não foi possível carregar os dados do Vertex:",
-                error
-            );
-
-            folders = defaultFolders;
-            tasks = defaultTasks;
-
-        }
-
-    }
-
-
-    function saveData() {
-
-        const data = {
-
-            folders: folders,
-
-            tasks: tasks
-
-        };
-
-
-        localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(data)
-        );
-
-    }
-
-
-    /* =====================================================
-       ESTADO DA INTERFACE
-       ===================================================== */
-
-    let currentFilter = "all";
-    let currentFolderFilter = null;
-    let currentListFilter = null;
-    let currentModal = null;
-
-
-    /* =====================================================
-       FORMATAÇÃO DE DATAS
-       ===================================================== */
-
-    function formatDate(date) {
-
-        if (!date) return "";
-
-        const parts = date.split("-");
-
-        return `${parts[2]}/${parts[1]}/${parts[0]}`;
-
-    }
-
-
-    /* =====================================================
-       ÁRVORE DE ORGANIZAÇÃO
-       ===================================================== */
-
-    function renderOrganization() {
-
-        const container =
-            document.getElementById("organizationTree");
-
-        container.innerHTML = "";
-
-
-        folders.forEach(folder => {
-
-            const folderElement =
-                document.createElement("div");
-
-            folderElement.className = "folder";
-
-
-            const header =
-                document.createElement("button");
-
-            header.className = "folder-header";
-
-
-            header.onclick = () => {
-
-                folder.open = !folder.open;
-
-                saveData();
-
-                renderOrganization();
-
-            };
-
-
-            const arrow =
-                folder.open ? "▼" : "▶";
-
-
-            header.innerHTML = `
-                <span class="folder-arrow">${arrow}</span>
-                <span class="folder-name">${folder.name}</span>
-            `;
-
-
-            folderElement.appendChild(header);
-
-
-            if (folder.open) {
-
-                const content =
-                    document.createElement("div");
-
-                content.className = "folder-content";
-
-
-                folder.lists.forEach(list => {
-
-                    const button =
-                        document.createElement("button");
-
-                    button.className = "list-button";
-
-                    button.textContent = list.name;
-
-
-                    button.onclick = () => {
-
-                        currentFilter = "list";
-                        currentFolderFilter = folder.id;
-                        currentListFilter = list.id;
-
-                        updateActiveSidebar();
-
-
-                        document.getElementById("pageTitle")
-                            .textContent =
-                            `${folder.name} / ${list.name}`;
-
-
-                        renderTasks();
-
-                    };
-
-
-                    content.appendChild(button);
-
-                });
-
-
-                folderElement.appendChild(content);
-
-            }
-
-
-            container.appendChild(folderElement);
-
-        });
-
-    }
-
-
-    /* =====================================================
-       FILTROS
-       ===================================================== */
-
-    document.querySelectorAll(".sidebar-button")
-        .forEach(button => {
-
-            button.addEventListener("click", () => {
-
-                currentFilter =
-                    button.dataset.filter;
-
-                currentFolderFilter = null;
-                currentListFilter = null;
-
-                updateActiveSidebar();
-
-
-                const titles = {
-
-                    all: "Todas as tarefas",
-
-                    today: "Hoje",
-
-                    upcoming: "Próximas",
-
-                    overdue: "Atrasadas",
-
-                    completed: "Concluídas"
-
-                };
-
-
-                document.getElementById("pageTitle")
-                    .textContent =
-                    titles[currentFilter];
-
-
-                renderTasks();
-
-            });
-
-        });
-
-
-    function updateActiveSidebar() {
-
-        document.querySelectorAll(".sidebar-button")
-            .forEach(button => {
-
-                button.classList.remove("active");
-
-            });
-
-
-        if (currentFilter !== "list") {
-
-            const button =
-                document.querySelector(
-                    `.sidebar-button[data-filter="${currentFilter}"]`
-                );
-
-
-            if (button) {
-
-                button.classList.add("active");
-
-            }
-
-        }
-
-    }
-
-
-    /* =====================================================
-       TAREFAS
-       ===================================================== */
-
-    function renderTasks() {
-
-        const container =
-            document.getElementById("taskList");
-
-
-        const search =
-            document.getElementById("searchInput")
-                .value
-                .toLowerCase()
-                .trim();
-
-
-        let filtered = [...tasks];
-
-
-        if (currentFilter === "all") {
-
-            filtered =
-                filtered.filter(
-                    task => task.status !== "Concluída"
-                );
-
-        }
-
-
-        else if (currentFilter === "today") {
-
-            filtered =
-                filtered.filter(task =>
-                    task.status !== "Concluída" &&
-                    task.date === today()
-                );
-
-        }
-
-
-        else if (currentFilter === "upcoming") {
-
-            filtered =
-                filtered.filter(task =>
-                    task.status !== "Concluída" &&
-                    task.date > today()
-                );
-
-        }
-
-
-        else if (currentFilter === "overdue") {
-
-            filtered =
-                filtered.filter(task =>
-                    task.status !== "Concluída" &&
-                    task.date < today()
-                );
-
-        }
-
-
-        else if (currentFilter === "completed") {
-
-            filtered =
-                filtered.filter(
-                    task => task.status === "Concluída"
-                );
-
-        }
-
-
-        else if (currentFilter === "list") {
-
-            filtered =
-                filtered.filter(task =>
-                    task.folderId === currentFolderFilter &&
-                    task.listId === currentListFilter &&
-                    task.status !== "Concluída"
-                );
-
-        }
-
-
-        if (search) {
-
-            filtered =
-                filtered.filter(task =>
-                    task.name
-                        .toLowerCase()
-                        .includes(search)
-                );
-
-        }
-
-
-        container.innerHTML = "";
-
-
-        if (filtered.length === 0) {
-
-            container.innerHTML = `
-                <div class="empty-message">
-                    Nenhuma tarefa encontrada.
-                </div>
-            `;
-
-            return;
-
-        }
-
-
-        filtered.forEach(task => {
-
-            const element =
-                document.createElement("div");
-
-
-            element.className =
-                "task" +
-                (
-                    task.status === "Concluída"
-                        ? " completed"
-                        : ""
-                );
-
-
-            const folder =
-                folders.find(
-                    folder => folder.id === task.folderId
-                );
-
-
-            const list =
-                folder?.lists.find(
-                    list => list.id === task.listId
-                );
-
-
-            element.innerHTML = `
-
-                <input
-                    type="checkbox"
-                    class="task-checkbox"
-                    ${
-                        task.status === "Concluída"
-                            ? "checked"
-                            : ""
-                    }
-                >
-
-                <div class="task-body">
-
-                    <div class="task-name">
-                        ${task.name}
-                    </div>
-
-                    <div class="task-meta">
-
-                        <span class="task-tag">
-                            ${folder ? folder.name : ""}
-                        </span>
-
-                        <span class="task-tag">
-                            ${list ? list.name : ""}
-                        </span>
-
-                        <span class="task-tag">
-                            ${task.status}
-                        </span>
-
-                        <span class="task-tag">
-                            ${task.recurrence === "X dias"
-                                ? `${task.recurrenceDays} dias`
-                                : task.recurrence}
-                        </span>
-
-                        <span class="task-date">
-                            ${formatDate(task.date)}
-                        </span>
-
-                    </div>
-
-                </div>
-            `;
-
-
-            const checkbox =
-                element.querySelector(".task-checkbox");
-
-
-            checkbox.addEventListener("change", () => {
-
-                task.status =
-                    checkbox.checked
-                        ? "Concluída"
-                        : "Pendente";
-
-                task.completed =
-                    checkbox.checked;
-
-                saveData();
-
-                renderTasks();
-
-            });
-
-
-            container.appendChild(element);
-
-        });
-
-    }
-
-
-    /* =====================================================
-       PESQUISA
-       ===================================================== */
-
-    document.getElementById("searchInput")
-        .addEventListener("input", renderTasks);
-
-
-    /* =====================================================
-       MODAL
-       ===================================================== */
-
-    function openModal(type) {
-
-        currentModal = type;
-
-
-        const background =
-            document.getElementById("modalBackground");
-
-
-        const title =
-            document.getElementById("modalTitle");
-
-
-        const content =
-            document.getElementById("modalContent");
-
-
-        if (type === "task") {
-
-            title.textContent = "Nova tarefa";
-
-
-            let options = "";
-
-
-            folders.forEach(folder => {
-
-                folder.lists.forEach(list => {
-
-                    options += `
-                        <option value="${folder.id}|${list.id}">
-                            ${folder.name} / ${list.name}
-                        </option>
-                    `;
-
-                });
-
-            });
-
-
-            content.innerHTML = `
-
-                <label>Nome da tarefa</label>
-
-                <input
-                    id="modalTaskName"
-                    type="text"
-                    placeholder="Exemplo de tarefa"
-                >
-
-                <label>Lista</label>
-
-                <select id="modalTaskList">
-                    ${options}
-                </select>
-
-                <label>Status</label>
-
-                <select id="modalTaskStatus">
-
-                    <option value="Pendente">
-                        Pendente
-                    </option>
-
-                    <option value="Projeto">
-                        Projeto
-                    </option>
-
-                    <option value="Concluída">
-                        Concluída
-                    </option>
-
-                </select>
-
-                <label>Recorrência</label>
-
-                <select
-                    id="modalTaskRecurrence"
-                    onchange="updateRecurrenceField()"
-                >
-
-                    <option value="Única">
-                        Única
-                    </option>
-
-                    <option value="Semanal">
-                        Semanal
-                    </option>
-
-                    <option value="Mensal">
-                        Mensal
-                    </option>
-
-                    <option value="Anual">
-                        Anual
-                    </option>
-
-                    <option value="X dias">
-                        X dias
-                    </option>
-
-                </select>
-
-                <div id="recurrenceDaysContainer"
-                     style="display:none;">
-
-                    <label>Intervalo em dias</label>
-
-                    <input
-                        id="modalRecurrenceDays"
-                        type="number"
-                        min="1"
-                        step="1"
-                        placeholder="Exemplo: 15"
-                    >
-
-                </div>
-
-                <label>Data</label>
-
-                <input
-                    id="modalTaskDate"
-                    type="date"
-                    value="${today()}"
-                >
-
-            `;
-
-        }
-
-
-        if (type === "list") {
-
-            title.textContent = "Nova lista";
-
-
-            let options = "";
-
-
-            folders.forEach(folder => {
-
-                options += `
-                    <option value="${folder.id}">
-                        ${folder.name}
-                    </option>
-                `;
-
-            });
-
-
-            content.innerHTML = `
-
-                <label>Nome da lista</label>
-
-                <input
-                    id="modalListName"
-                    type="text"
-                    placeholder="Exemplo"
-                >
-
-                <label>Pasta</label>
-
-                <select id="modalListFolder">
-                    ${options}
-                </select>
-
-            `;
-
-        }
-
-
-        if (type === "folder") {
-
-            title.textContent = "Nova pasta";
-
-
-            content.innerHTML = `
-
-                <label>Nome da pasta</label>
-
-                <input
-                    id="modalFolderName"
-                    type="text"
-                    placeholder="Exemplo"
-                >
-
-            `;
-
-        }
-
-
-        background.classList.add("visible");
-
-    }
-
-
-    /* =====================================================
-       CAMPO DE RECORRÊNCIA "X DIAS"
-       ===================================================== */
-
-    function updateRecurrenceField() {
-
-        const select =
-            document.getElementById("modalTaskRecurrence");
-
-
-        const container =
-            document.getElementById(
-                "recurrenceDaysContainer"
-            );
-
-
-        if (!select || !container) return;
-
-
-        if (select.value === "X dias") {
-
-            container.style.display = "block";
-
-        } else {
-
-            container.style.display = "none";
-
-        }
-
-    }
-
-
-    function closeModal() {
-
-        document.getElementById("modalBackground")
-            .classList.remove("visible");
-
-        currentModal = null;
-
-    }
-
-
-    /* =====================================================
-       SALVAR MODAL
-       ===================================================== */
-
-    function saveModal() {
-
-        if (currentModal === "folder") {
-
-            const name =
-                document.getElementById("modalFolderName")
-                    .value
-                    .trim();
-
-
-            if (!name) return;
-
-
-            folders.push({
-
-                id: Date.now(),
-
-                name: name,
-
-                open: true,
-
-                lists: []
-
-            });
-
-        }
-
-
-        if (currentModal === "list") {
-
-            const name =
-                document.getElementById("modalListName")
-                    .value
-                    .trim();
-
-
-            const folderId =
-                Number(
-                    document.getElementById("modalListFolder")
-                        .value
-                );
-
-
-            if (!name) return;
-
-
-            const folder =
-                folders.find(
-                    folder => folder.id === folderId
-                );
-
-
-            if (folder) {
-
-                folder.lists.push({
-
-                    id: Date.now(),
-
-                    name: name
-
-                });
-
-
-                folder.open = true;
-
-            }
-
-        }
-
-
-        if (currentModal === "task") {
-
-            const name =
-                document.getElementById("modalTaskName")
-                    .value
-                    .trim();
-
-
-            const values =
-                document.getElementById("modalTaskList")
-                    .value
-                    .split("|");
-
-
-            const folderId =
-                Number(values[0]);
-
-
-            const listId =
-                Number(values[1]);
-
-
-            const date =
-                document.getElementById("modalTaskDate")
-                    .value;
-
-
-            const status =
-                document.getElementById("modalTaskStatus")
-                    .value;
-
-
-            const recurrence =
-                document.getElementById("modalTaskRecurrence")
-                    .value;
-
-
-            let recurrenceDays = null;
-
-
-            if (recurrence === "X dias") {
-
-                recurrenceDays =
-                    Number(
-                        document.getElementById(
-                            "modalRecurrenceDays"
-                        ).value
-                    );
-
-
-                if (
-                    !recurrenceDays ||
-                    recurrenceDays < 1
-                ) {
-
-                    return;
-
-                }
-
-            }
-
-
-            if (!name) return;
-
-
-            tasks.push({
-
-                id: Date.now(),
-
-                name: name,
-
-                folderId: folderId,
-
-                listId: listId,
-
-                completed:
-                    status === "Concluída",
-
-                status: status,
-
-                recurrence: recurrence,
-
-                recurrenceDays: recurrenceDays,
-
-                date: date
-
-            });
-
-        }
-
-
-        /* Salva imediatamente após qualquer alteração */
+        tasks = (data.tasks || JSON.parse(JSON.stringify(defaultTasks)))
+            .map(migrateTask);
 
         saveData();
 
+    } catch (error) {
 
-        closeModal();
+        console.error("Erro ao carregar dados:", error);
 
-        renderOrganization();
+        folders = JSON.parse(JSON.stringify(defaultFolders));
+        tasks = JSON.parse(JSON.stringify(defaultTasks));
 
+        saveData();
+    }
+}
+
+
+function saveData() {
+
+    localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({
+            folders,
+            tasks
+        })
+    );
+}
+
+
+/* =========================================================
+   ORGANIZAÇÃO
+   ========================================================= */
+
+function renderOrganization() {
+
+    const container = document.getElementById("organization");
+
+    container.innerHTML = "";
+
+    folders.forEach(folder => {
+
+        const folderElement = document.createElement("div");
+        folderElement.className = "folder";
+
+        const header = document.createElement("div");
+        header.className = "folder-header";
+
+        const arrow = document.createElement("span");
+        arrow.className = "folder-arrow";
+        arrow.textContent = folder.open ? "▼" : "▶";
+
+        const name = document.createElement("span");
+        name.textContent = folder.name;
+
+        header.appendChild(arrow);
+        header.appendChild(name);
+
+        header.onclick = () => {
+
+            folder.open = !folder.open;
+
+            saveData();
+            renderOrganization();
+        };
+
+        folderElement.appendChild(header);
+
+        if (folder.open) {
+
+            const listsContainer = document.createElement("div");
+            listsContainer.className = "folder-lists";
+
+            folder.lists.forEach(list => {
+
+                const listElement = document.createElement("div");
+                listElement.className = "list-item";
+                listElement.textContent = list.name;
+
+                listElement.onclick = event => {
+
+                    event.stopPropagation();
+
+                    currentListId = list.id;
+                    currentView = "list";
+
+                    document
+                        .querySelectorAll(".nav-item")
+                        .forEach(item => item.classList.remove("active"));
+
+                    document.getElementById("pageTitle").textContent =
+                        list.name;
+
+                    renderTasks();
+                };
+
+                listsContainer.appendChild(listElement);
+            });
+
+            folderElement.appendChild(listsContainer);
+        }
+
+        container.appendChild(folderElement);
+    });
+}
+
+
+/* =========================================================
+   NAVEGAÇÃO
+   ========================================================= */
+
+function changeView(view, element) {
+
+    currentView = view;
+    currentListId = null;
+
+    document
+        .querySelectorAll(".nav-item")
+        .forEach(item => item.classList.remove("active"));
+
+    element.classList.add("active");
+
+    const titles = {
+        all: "Todas",
+        today: "Hoje",
+        upcoming: "Próximas",
+        overdue: "Atrasadas",
+        completed: "Concluídas"
+    };
+
+    document.getElementById("pageTitle").textContent =
+        titles[view] || "Tarefas";
+
+    renderTasks();
+}
+
+
+/* =========================================================
+   FILTRO DE TAREFAS
+   ========================================================= */
+
+function isToday(date) {
+    return date === today();
+}
+
+
+function isUpcoming(date) {
+    return date > today();
+}
+
+
+function isOverdue(date) {
+    return date < today();
+}
+
+
+function getVisibleTasks() {
+
+    let result = [];
+
+    if (currentView === "all") {
+
+        result = tasks.filter(
+            task => task.status !== "Concluída"
+        );
+
+    } else if (currentView === "today") {
+
+        result = tasks.filter(
+            task =>
+                task.status !== "Concluída" &&
+                isToday(task.date)
+        );
+
+    } else if (currentView === "upcoming") {
+
+        result = tasks.filter(
+            task =>
+                task.status !== "Concluída" &&
+                isUpcoming(task.date)
+        );
+
+    } else if (currentView === "overdue") {
+
+        result = tasks.filter(
+            task =>
+                task.status !== "Concluída" &&
+                isOverdue(task.date)
+        );
+
+    } else if (currentView === "completed") {
+
+        result = tasks.filter(
+            task => task.status === "Concluída"
+        );
+
+    } else if (currentView === "list") {
+
+        result = tasks.filter(
+            task => task.listId === currentListId
+        );
+    }
+
+    return result;
+}
+
+
+/* =========================================================
+   RENDERIZAR TAREFAS
+   ========================================================= */
+
+function renderTasks() {
+
+    const container = document.getElementById("tasks");
+
+    container.innerHTML = "";
+
+    const visibleTasks = getVisibleTasks();
+
+    if (visibleTasks.length === 0) {
+
+        const empty = document.createElement("div");
+        empty.className = "empty";
+        empty.textContent = "Nenhuma tarefa para mostrar.";
+
+        container.appendChild(empty);
+        return;
+    }
+
+    visibleTasks.forEach(task => {
+
+        const taskElement = document.createElement("div");
+        taskElement.className = "task";
+
+        if (task.status === "Concluída") {
+            taskElement.classList.add("completed");
+        }
+
+        /* Checkbox */
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.className = "task-checkbox";
+        checkbox.checked = task.status === "Concluída";
+
+        checkbox.onclick = event => {
+            event.stopPropagation();
+        };
+
+        checkbox.onchange = () => {
+
+            if (checkbox.checked) {
+
+                task.status = "Concluída";
+                task.completed = true;
+
+            } else {
+
+                task.status = "Pendente";
+                task.completed = false;
+            }
+
+            saveData();
+            renderTasks();
+        };
+
+        taskElement.appendChild(checkbox);
+
+
+        /* Corpo da tarefa */
+
+        const taskMain = document.createElement("div");
+        taskMain.className = "task-main";
+
+        taskMain.onclick = () => {
+            openTaskList(task);
+        };
+
+
+        const taskName = document.createElement("div");
+        taskName.className = "task-name";
+        taskName.textContent = task.name;
+
+        taskMain.appendChild(taskName);
+
+
+        /* Meta / etiquetas */
+
+        const meta = document.createElement("div");
+        meta.className = "task-meta";
+
+
+        if (visibility.status) {
+
+            const statusTag = document.createElement("span");
+
+            statusTag.className = "tag tag-status";
+
+            if (task.status === "Projeto") {
+                statusTag.classList.add("projeto");
+            }
+
+            if (task.status === "Concluída") {
+                statusTag.classList.add("concluida");
+            }
+
+            statusTag.textContent = task.status;
+
+            meta.appendChild(statusTag);
+        }
+
+
+        if (visibility.recurrence) {
+
+            const recurrenceTag = document.createElement("span");
+
+            recurrenceTag.className = "tag tag-recurrence";
+
+            let recurrenceText = task.recurrence;
+
+            if (
+                task.recurrence === "X dias" &&
+                task.recurrenceDays
+            ) {
+                recurrenceText =
+                    `↻ a cada ${task.recurrenceDays} dias`;
+            } else if (task.recurrence === "Diária") {
+                recurrenceText = "↻ diária";
+            } else if (task.recurrence === "Semanal") {
+                recurrenceText = "↻ semanal";
+            } else if (task.recurrence === "Mensal") {
+                recurrenceText = "↻ mensal";
+            } else if (task.recurrence === "Anual") {
+                recurrenceText = "↻ anual";
+            }
+
+            recurrenceTag.textContent = recurrenceText;
+
+            meta.appendChild(recurrenceTag);
+        }
+
+
+        if (visibility.date && task.date) {
+
+            const dateTag = document.createElement("span");
+
+            dateTag.className = "task-date";
+
+            dateTag.textContent = formatDisplayDate(task.date);
+
+            meta.appendChild(dateTag);
+        }
+
+
+        taskMain.appendChild(meta);
+
+        taskElement.appendChild(taskMain);
+
+
+        /* Três pontinhos */
+
+        const menuButton = document.createElement("button");
+
+        menuButton.className = "task-menu-button";
+        menuButton.textContent = "⋮";
+        menuButton.title = "Ações da tarefa";
+
+        menuButton.onclick = event => {
+
+            event.stopPropagation();
+
+            closeAllTaskMenus();
+
+            const menu = createTaskMenu(task);
+
+            taskElement.appendChild(menu);
+        };
+
+        taskElement.appendChild(menuButton);
+
+        container.appendChild(taskElement);
+    });
+}
+
+
+/* =========================================================
+   DATA FORMATADA
+   ========================================================= */
+
+function formatDisplayDate(dateString) {
+
+    if (!dateString) return "";
+
+    const parts = dateString.split("-");
+
+    if (parts.length !== 3) return dateString;
+
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+}
+
+
+/* =========================================================
+   ABRIR LISTA DA TAREFA
+   ========================================================= */
+
+function openTaskList(task) {
+
+    currentListId = task.listId;
+    currentView = "list";
+
+    document
+        .querySelectorAll(".nav-item")
+        .forEach(item => item.classList.remove("active"));
+
+    let folderFound = null;
+    let listFound = null;
+
+    folders.forEach(folder => {
+
+        folder.lists.forEach(list => {
+
+            if (list.id === task.listId) {
+
+                folderFound = folder;
+                listFound = list;
+            }
+        });
+    });
+
+    if (folderFound && listFound) {
+
+        document.getElementById("pageTitle").textContent =
+            listFound.name;
+
+        if (!folderFound.open) {
+            folderFound.open = true;
+            saveData();
+        }
+
+    } else {
+
+        document.getElementById("pageTitle").textContent =
+            "Lista";
+    }
+
+    renderOrganization();
+    renderTasks();
+}
+
+
+/* =========================================================
+   MENU DA TAREFA
+   ========================================================= */
+
+function createTaskMenu(task) {
+
+    const menu = document.createElement("div");
+    menu.className = "task-menu";
+
+    const editButton = document.createElement("button");
+    editButton.textContent = "Editar";
+
+    editButton.onclick = event => {
+
+        event.stopPropagation();
+
+        closeAllTaskMenus();
+        openEditTaskModal(task.id);
+    };
+
+    menu.appendChild(editButton);
+
+
+    const toggleButton = document.createElement("button");
+
+    if (task.status === "Concluída") {
+        toggleButton.textContent = "Reabrir";
+    } else {
+        toggleButton.textContent = "Concluir";
+    }
+
+    toggleButton.onclick = event => {
+
+        event.stopPropagation();
+
+        if (task.status === "Concluída") {
+
+            task.status = "Pendente";
+            task.completed = false;
+
+        } else {
+
+            task.status = "Concluída";
+            task.completed = true;
+        }
+
+        saveData();
         renderTasks();
+    };
+
+    menu.appendChild(toggleButton);
+
+
+    const deleteButton = document.createElement("button");
+
+    deleteButton.className = "danger";
+    deleteButton.textContent = "Excluir";
+
+    deleteButton.onclick = event => {
+
+        event.stopPropagation();
+
+        deleteTask(task.id);
+    };
+
+    menu.appendChild(deleteButton);
+
+    return menu;
+}
+
+
+function closeAllTaskMenus() {
+
+    document
+        .querySelectorAll(".task-menu")
+        .forEach(menu => menu.remove());
+}
+
+
+/* =========================================================
+   EXCLUIR
+   ========================================================= */
+
+function deleteTask(taskId) {
+
+    const task = tasks.find(item => item.id === taskId);
+
+    if (!task) return;
+
+    const confirmed = confirm(
+        `Excluir a tarefa "${task.name}"?`
+    );
+
+    if (!confirmed) return;
+
+    tasks = tasks.filter(item => item.id !== taskId);
+
+    saveData();
+    renderTasks();
+}
+
+
+/* =========================================================
+   MODAL
+   ========================================================= */
+
+function openNewTaskModal() {
+
+    editingTaskId = null;
+
+    document.getElementById("taskModalTitle").textContent =
+        "Nova tarefa";
+
+    document.getElementById("modalTaskName").value = "";
+
+    populateFolderSelect();
+
+    document.getElementById("modalTaskStatus").value =
+        "Pendente";
+
+    document.getElementById("modalTaskRecurrence").value =
+        "Única";
+
+    document.getElementById("modalRecurrenceDays").value =
+        "";
+
+    document.getElementById("modalTaskDate").value =
+        today();
+
+    updateRecurrenceField();
+
+    document.getElementById("taskModal").classList.remove("hidden");
+}
+
+
+function openEditTaskModal(taskId) {
+
+    const task = tasks.find(item => item.id === taskId);
+
+    if (!task) return;
+
+    editingTaskId = taskId;
+
+    document.getElementById("taskModalTitle").textContent =
+        "Editar tarefa";
+
+    document.getElementById("modalTaskName").value =
+        task.name;
+
+    populateFolderSelect();
+
+    document.getElementById("modalTaskFolder").value =
+        String(task.folderId);
+
+    updateModalLists();
+
+    document.getElementById("modalTaskList").value =
+        String(task.listId);
+
+    document.getElementById("modalTaskStatus").value =
+        task.status;
+
+    document.getElementById("modalTaskRecurrence").value =
+        task.recurrence;
+
+    document.getElementById("modalRecurrenceDays").value =
+        task.recurrenceDays || "";
+
+    document.getElementById("modalTaskDate").value =
+        task.date || today();
+
+    updateRecurrenceField();
+
+    document.getElementById("taskModal").classList.remove("hidden");
+}
+
+
+function closeModal() {
+
+    document
+        .getElementById("taskModal")
+        .classList.add("hidden");
+
+    editingTaskId = null;
+}
+
+
+/* =========================================================
+   FORMULÁRIO
+   ========================================================= */
+
+function populateFolderSelect() {
+
+    const select = document.getElementById("modalTaskFolder");
+
+    select.innerHTML = "";
+
+    folders.forEach(folder => {
+
+        const option = document.createElement("option");
+
+        option.value = folder.id;
+        option.textContent = folder.name;
+
+        select.appendChild(option);
+    });
+
+    updateModalLists();
+}
+
+
+function updateModalLists() {
+
+    const folderId =
+        Number(document.getElementById("modalTaskFolder").value);
+
+    const folder =
+        folders.find(item => item.id === folderId);
+
+    const select =
+        document.getElementById("modalTaskList");
+
+    select.innerHTML = "";
+
+    if (!folder) return;
+
+    folder.lists.forEach(list => {
+
+        const option = document.createElement("option");
+
+        option.value = list.id;
+        option.textContent = list.name;
+
+        select.appendChild(option);
+    });
+}
+
+
+function updateRecurrenceField() {
+
+    const recurrence =
+        document.getElementById("modalTaskRecurrence").value;
+
+    const container =
+        document.getElementById("recurrenceDaysContainer");
+
+    if (recurrence === "X dias") {
+
+        container.classList.remove("hidden");
+
+    } else {
+
+        container.classList.add("hidden");
+    }
+}
+
+
+/* =========================================================
+   SALVAR TAREFA
+   ========================================================= */
+
+function saveModal() {
+
+    const name =
+        document.getElementById("modalTaskName")
+            .value
+            .trim();
+
+    if (!name) {
+
+        alert("Digite o nome da tarefa.");
+        return;
+    }
+
+    const folderId =
+        Number(document.getElementById("modalTaskFolder").value);
+
+    const listId =
+        Number(document.getElementById("modalTaskList").value);
+
+    const status =
+        document.getElementById("modalTaskStatus").value;
+
+    const recurrence =
+        document.getElementById("modalTaskRecurrence").value;
+
+    let recurrenceDays = null;
+
+    if (recurrence === "X dias") {
+
+        recurrenceDays =
+            Number(
+                document.getElementById("modalRecurrenceDays").value
+            );
+
+        if (!recurrenceDays || recurrenceDays < 1) {
+
+            alert(
+                "Informe um intervalo válido em dias."
+            );
+
+            return;
+        }
+    }
+
+    const date =
+        document.getElementById("modalTaskDate").value ||
+        today();
+
+
+    /* Edição */
+
+    if (editingTaskId !== null) {
+
+        const task =
+            tasks.find(item => item.id === editingTaskId);
+
+        if (!task) return;
+
+        task.name = name;
+        task.folderId = folderId;
+        task.listId = listId;
+        task.status = status;
+        task.completed = status === "Concluída";
+        task.recurrence = recurrence;
+        task.recurrenceDays = recurrenceDays;
+        task.date = date;
 
     }
 
+    /* Nova tarefa */
 
-    /* =====================================================
-       INICIALIZAÇÃO
-       ===================================================== */
+    else {
 
-    loadData();
+        tasks.push({
+
+            id: Date.now(),
+
+            name,
+
+            folderId,
+
+            listId,
+
+            completed: status === "Concluída",
+
+            status,
+
+            recurrence,
+
+            recurrenceDays,
+
+            date
+        });
+    }
+
+
+    saveData();
+
+    closeModal();
 
     renderOrganization();
+    renderTasks();
+}
+
+
+/* =========================================================
+   VISUALIZAÇÃO
+   ========================================================= */
+
+function toggleViewMenu() {
+
+    document
+        .getElementById("viewMenu")
+        .classList.toggle("hidden");
+}
+
+
+function changeVisibility(type, value) {
+
+    visibility[type] = value;
 
     renderTasks();
+}
+
+
+/* =========================================================
+   NOVA LISTA / NOVA PASTA
+   ========================================================= */
+
+function openNewListModal() {
+
+    const name = prompt(
+        "Nome da nova lista:"
+    );
+
+    if (!name || !name.trim()) return;
+
+    const folderName = prompt(
+        "Em qual pasta deseja criar a lista?"
+    );
+
+    if (!folderName || !folderName.trim()) return;
+
+    const folder =
+        folders.find(
+            item =>
+                item.name.toLowerCase() ===
+                folderName.trim().toLowerCase()
+        );
+
+    if (!folder) {
+
+        alert("Pasta não encontrada.");
+        return;
+    }
+
+    const newListId =
+        Date.now();
+
+    folder.lists.push({
+        id: newListId,
+        name: name.trim()
+    });
+
+    folder.open = true;
+
+    saveData();
+    renderOrganization();
+}
+
+
+function openNewFolderModal() {
+
+    const name = prompt(
+        "Nome da nova pasta:"
+    );
+
+    if (!name || !name.trim()) return;
+
+    folders.push({
+
+        id: Date.now(),
+
+        name: name.trim(),
+
+        open: true,
+
+        lists: []
+    });
+
+    saveData();
+    renderOrganization();
+}
+
+
+/* =========================================================
+   CONFIGURAÇÕES
+   ========================================================= */
+
+function showSettings() {
+
+    alert(
+        "As configurações do Vertex serão desenvolvidas em uma etapa posterior."
+    );
+}
+
+
+/* =========================================================
+   FECHAR MENUS AO CLICAR FORA
+   ========================================================= */
+
+document.addEventListener("click", event => {
+
+    const viewMenu =
+        document.getElementById("viewMenu");
+
+    const viewButton =
+        event.target.closest(".view-button");
+
+    if (
+        !event.target.closest(".view-menu") &&
+        !viewButton
+    ) {
+        viewMenu.classList.add("hidden");
+    }
+
+    if (!event.target.closest(".task-menu-button")) {
+        closeAllTaskMenus();
+    }
+});
+
+
+/* =========================================================
+   INICIALIZAÇÃO
+   ========================================================= */
+
+loadData();
+
+renderOrganization();
+
+renderTasks();
 
 </script>
 
