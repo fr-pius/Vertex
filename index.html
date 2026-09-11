@@ -623,6 +623,7 @@
 
     }
 
+
     function today() {
 
         const date = new Date();
@@ -630,6 +631,7 @@
         return dateString(date);
 
     }
+
 
     function tomorrow() {
 
@@ -640,6 +642,7 @@
         return dateString(date);
 
     }
+
 
     function yesterday() {
 
@@ -659,6 +662,9 @@
             folderId: 1,
             listId: 1,
             completed: false,
+            status: "Pendente",
+            recurrence: "Única",
+            recurrenceDays: null,
             date: today()
         },
         {
@@ -667,6 +673,9 @@
             folderId: 1,
             listId: 2,
             completed: false,
+            status: "Pendente",
+            recurrence: "Única",
+            recurrenceDays: null,
             date: today()
         },
         {
@@ -675,6 +684,9 @@
             folderId: 2,
             listId: 4,
             completed: false,
+            status: "Pendente",
+            recurrence: "Única",
+            recurrenceDays: null,
             date: tomorrow()
         },
         {
@@ -683,6 +695,9 @@
             folderId: 2,
             listId: 5,
             completed: false,
+            status: "Pendente",
+            recurrence: "Única",
+            recurrenceDays: null,
             date: yesterday()
         },
         {
@@ -691,6 +706,9 @@
             folderId: 3,
             listId: 6,
             completed: true,
+            status: "Concluída",
+            recurrence: "Única",
+            recurrenceDays: null,
             date: yesterday()
         }
     ];
@@ -701,6 +719,44 @@
 
 
     /* =====================================================
+       MIGRAÇÃO DOS DADOS ANTIGOS
+       ===================================================== */
+
+    function migrateTask(task) {
+
+        if (!task.status) {
+
+            task.status =
+                task.completed
+                    ? "Concluída"
+                    : "Pendente";
+
+        }
+
+
+        if (!task.recurrence) {
+
+            task.recurrence = "Única";
+
+        }
+
+
+        if (!Object.prototype.hasOwnProperty.call(
+            task,
+            "recurrenceDays"
+        )) {
+
+            task.recurrenceDays = null;
+
+        }
+
+
+        return task;
+
+    }
+
+
+    /* =====================================================
        CARREGAR / SALVAR DADOS
        ===================================================== */
 
@@ -708,6 +764,7 @@
 
         const savedData =
             localStorage.getItem(STORAGE_KEY);
+
 
         if (!savedData) {
 
@@ -726,13 +783,16 @@
             const data =
                 JSON.parse(savedData);
 
+
             if (
                 Array.isArray(data.folders) &&
                 Array.isArray(data.tasks)
             ) {
 
                 folders = data.folders;
-                tasks = data.tasks;
+                tasks = data.tasks.map(migrateTask);
+
+                saveData();
 
             } else {
 
@@ -811,6 +871,7 @@
 
         container.innerHTML = "";
 
+
         folders.forEach(folder => {
 
             const folderElement =
@@ -823,6 +884,7 @@
                 document.createElement("button");
 
             header.className = "folder-header";
+
 
             header.onclick = () => {
 
@@ -843,6 +905,7 @@
                 <span class="folder-arrow">${arrow}</span>
                 <span class="folder-name">${folder.name}</span>
             `;
+
 
             folderElement.appendChild(header);
 
@@ -999,7 +1062,7 @@
 
             filtered =
                 filtered.filter(
-                    task => !task.completed
+                    task => task.status !== "Concluída"
                 );
 
         }
@@ -1009,7 +1072,7 @@
 
             filtered =
                 filtered.filter(task =>
-                    !task.completed &&
+                    task.status !== "Concluída" &&
                     task.date === today()
                 );
 
@@ -1020,7 +1083,7 @@
 
             filtered =
                 filtered.filter(task =>
-                    !task.completed &&
+                    task.status !== "Concluída" &&
                     task.date > today()
                 );
 
@@ -1031,7 +1094,7 @@
 
             filtered =
                 filtered.filter(task =>
-                    !task.completed &&
+                    task.status !== "Concluída" &&
                     task.date < today()
                 );
 
@@ -1042,7 +1105,7 @@
 
             filtered =
                 filtered.filter(
-                    task => task.completed
+                    task => task.status === "Concluída"
                 );
 
         }
@@ -1054,7 +1117,7 @@
                 filtered.filter(task =>
                     task.folderId === currentFolderFilter &&
                     task.listId === currentListFilter &&
-                    !task.completed
+                    task.status !== "Concluída"
                 );
 
         }
@@ -1096,7 +1159,11 @@
 
             element.className =
                 "task" +
-                (task.completed ? " completed" : "");
+                (
+                    task.status === "Concluída"
+                        ? " completed"
+                        : ""
+                );
 
 
             const folder =
@@ -1116,7 +1183,11 @@
                 <input
                     type="checkbox"
                     class="task-checkbox"
-                    ${task.completed ? "checked" : ""}
+                    ${
+                        task.status === "Concluída"
+                            ? "checked"
+                            : ""
+                    }
                 >
 
                 <div class="task-body">
@@ -1135,6 +1206,16 @@
                             ${list ? list.name : ""}
                         </span>
 
+                        <span class="task-tag">
+                            ${task.status}
+                        </span>
+
+                        <span class="task-tag">
+                            ${task.recurrence === "X dias"
+                                ? `${task.recurrenceDays} dias`
+                                : task.recurrence}
+                        </span>
+
                         <span class="task-date">
                             ${formatDate(task.date)}
                         </span>
@@ -1150,6 +1231,11 @@
 
 
             checkbox.addEventListener("change", () => {
+
+                task.status =
+                    checkbox.checked
+                        ? "Concluída"
+                        : "Pendente";
 
                 task.completed =
                     checkbox.checked;
@@ -1236,6 +1322,68 @@
                     ${options}
                 </select>
 
+                <label>Status</label>
+
+                <select id="modalTaskStatus">
+
+                    <option value="Pendente">
+                        Pendente
+                    </option>
+
+                    <option value="Projeto">
+                        Projeto
+                    </option>
+
+                    <option value="Concluída">
+                        Concluída
+                    </option>
+
+                </select>
+
+                <label>Recorrência</label>
+
+                <select
+                    id="modalTaskRecurrence"
+                    onchange="updateRecurrenceField()"
+                >
+
+                    <option value="Única">
+                        Única
+                    </option>
+
+                    <option value="Semanal">
+                        Semanal
+                    </option>
+
+                    <option value="Mensal">
+                        Mensal
+                    </option>
+
+                    <option value="Anual">
+                        Anual
+                    </option>
+
+                    <option value="X dias">
+                        X dias
+                    </option>
+
+                </select>
+
+                <div id="recurrenceDaysContainer"
+                     style="display:none;">
+
+                    <label>Intervalo em dias</label>
+
+                    <input
+                        id="modalRecurrenceDays"
+                        type="number"
+                        min="1"
+                        step="1"
+                        placeholder="Exemplo: 15"
+                    >
+
+                </div>
+
                 <label>Data</label>
 
                 <input
@@ -1314,6 +1462,38 @@
     }
 
 
+    /* =====================================================
+       CAMPO DE RECORRÊNCIA "X DIAS"
+       ===================================================== */
+
+    function updateRecurrenceField() {
+
+        const select =
+            document.getElementById("modalTaskRecurrence");
+
+
+        const container =
+            document.getElementById(
+                "recurrenceDaysContainer"
+            );
+
+
+        if (!select || !container) return;
+
+
+        if (select.value === "X dias") {
+
+            container.style.display = "block";
+
+        } else {
+
+            container.style.display = "none";
+
+        }
+
+    }
+
+
     function closeModal() {
 
         document.getElementById("modalBackground")
@@ -1323,6 +1503,10 @@
 
     }
 
+
+    /* =====================================================
+       SALVAR MODAL
+       ===================================================== */
 
     function saveModal() {
 
@@ -1421,6 +1605,41 @@
                     .value;
 
 
+            const status =
+                document.getElementById("modalTaskStatus")
+                    .value;
+
+
+            const recurrence =
+                document.getElementById("modalTaskRecurrence")
+                    .value;
+
+
+            let recurrenceDays = null;
+
+
+            if (recurrence === "X dias") {
+
+                recurrenceDays =
+                    Number(
+                        document.getElementById(
+                            "modalRecurrenceDays"
+                        ).value
+                    );
+
+
+                if (
+                    !recurrenceDays ||
+                    recurrenceDays < 1
+                ) {
+
+                    return;
+
+                }
+
+            }
+
+
             if (!name) return;
 
 
@@ -1434,7 +1653,14 @@
 
                 listId: listId,
 
-                completed: false,
+                completed:
+                    status === "Concluída",
+
+                status: status,
+
+                recurrence: recurrence,
+
+                recurrenceDays: recurrenceDays,
 
                 date: date
 
