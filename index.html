@@ -576,10 +576,17 @@
 <script>
 
     /* =====================================================
+       PERSISTÊNCIA LOCAL
+       ===================================================== */
+
+    const STORAGE_KEY = "alceVertexDataV1";
+
+
+    /* =====================================================
        DADOS INICIAIS
        ===================================================== */
 
-    let folders = [
+    const defaultFolders = [
         {
             id: 1,
             name: "Exemplo 1",
@@ -610,7 +617,42 @@
     ];
 
 
-    let tasks = [
+    function dateString(date) {
+
+        return date.toISOString().split("T")[0];
+
+    }
+
+    function today() {
+
+        const date = new Date();
+
+        return dateString(date);
+
+    }
+
+    function tomorrow() {
+
+        const date = new Date();
+
+        date.setDate(date.getDate() + 1);
+
+        return dateString(date);
+
+    }
+
+    function yesterday() {
+
+        const date = new Date();
+
+        date.setDate(date.getDate() - 1);
+
+        return dateString(date);
+
+    }
+
+
+    const defaultTasks = [
         {
             id: 1,
             name: "Exemplo 1",
@@ -654,6 +696,89 @@
     ];
 
 
+    let folders;
+    let tasks;
+
+
+    /* =====================================================
+       CARREGAR / SALVAR DADOS
+       ===================================================== */
+
+    function loadData() {
+
+        const savedData =
+            localStorage.getItem(STORAGE_KEY);
+
+        if (!savedData) {
+
+            folders = defaultFolders;
+            tasks = defaultTasks;
+
+            saveData();
+
+            return;
+
+        }
+
+
+        try {
+
+            const data =
+                JSON.parse(savedData);
+
+            if (
+                Array.isArray(data.folders) &&
+                Array.isArray(data.tasks)
+            ) {
+
+                folders = data.folders;
+                tasks = data.tasks;
+
+            } else {
+
+                folders = defaultFolders;
+                tasks = defaultTasks;
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Não foi possível carregar os dados do Vertex:",
+                error
+            );
+
+            folders = defaultFolders;
+            tasks = defaultTasks;
+
+        }
+
+    }
+
+
+    function saveData() {
+
+        const data = {
+
+            folders: folders,
+
+            tasks: tasks
+
+        };
+
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(data)
+        );
+
+    }
+
+
+    /* =====================================================
+       ESTADO DA INTERFACE
+       ===================================================== */
+
     let currentFilter = "all";
     let currentFolderFilter = null;
     let currentListFilter = null;
@@ -661,43 +786,8 @@
 
 
     /* =====================================================
-       DATAS
+       FORMATAÇÃO DE DATAS
        ===================================================== */
-
-    function dateString(date) {
-
-        return date.toISOString().split("T")[0];
-
-    }
-
-    function today() {
-
-        const date = new Date();
-
-        return dateString(date);
-
-    }
-
-    function tomorrow() {
-
-        const date = new Date();
-
-        date.setDate(date.getDate() + 1);
-
-        return dateString(date);
-
-    }
-
-    function yesterday() {
-
-        const date = new Date();
-
-        date.setDate(date.getDate() - 1);
-
-        return dateString(date);
-
-    }
-
 
     function formatDate(date) {
 
@@ -728,6 +818,7 @@
 
             folderElement.className = "folder";
 
+
             const header =
                 document.createElement("button");
 
@@ -737,12 +828,16 @@
 
                 folder.open = !folder.open;
 
+                saveData();
+
                 renderOrganization();
 
             };
 
+
             const arrow =
                 folder.open ? "▼" : "▶";
+
 
             header.innerHTML = `
                 <span class="folder-arrow">${arrow}</span>
@@ -759,6 +854,7 @@
 
                 content.className = "folder-content";
 
+
                 folder.lists.forEach(list => {
 
                     const button =
@@ -768,6 +864,7 @@
 
                     button.textContent = list.name;
 
+
                     button.onclick = () => {
 
                         currentFilter = "list";
@@ -776,20 +873,26 @@
 
                         updateActiveSidebar();
 
-                        document.getElementById("pageTitle").textContent =
+
+                        document.getElementById("pageTitle")
+                            .textContent =
                             `${folder.name} / ${list.name}`;
+
 
                         renderTasks();
 
                     };
 
+
                     content.appendChild(button);
 
                 });
 
+
                 folderElement.appendChild(content);
 
             }
+
 
             container.appendChild(folderElement);
 
@@ -815,16 +918,26 @@
 
                 updateActiveSidebar();
 
+
                 const titles = {
+
                     all: "Todas as tarefas",
+
                     today: "Hoje",
+
                     upcoming: "Próximas",
+
                     overdue: "Atrasadas",
+
                     completed: "Concluídas"
+
                 };
 
+
                 document.getElementById("pageTitle")
-                    .textContent = titles[currentFilter];
+                    .textContent =
+                    titles[currentFilter];
+
 
                 renderTasks();
 
@@ -842,6 +955,7 @@
 
             });
 
+
         if (currentFilter !== "list") {
 
             const button =
@@ -849,8 +963,11 @@
                     `.sidebar-button[data-filter="${currentFilter}"]`
                 );
 
+
             if (button) {
+
                 button.classList.add("active");
+
             }
 
         }
@@ -867,11 +984,13 @@
         const container =
             document.getElementById("taskList");
 
+
         const search =
             document.getElementById("searchInput")
                 .value
                 .toLowerCase()
                 .trim();
+
 
         let filtered = [...tasks];
 
@@ -879,9 +998,12 @@
         if (currentFilter === "all") {
 
             filtered =
-                filtered.filter(task => !task.completed);
+                filtered.filter(
+                    task => !task.completed
+                );
 
         }
+
 
         else if (currentFilter === "today") {
 
@@ -893,6 +1015,7 @@
 
         }
 
+
         else if (currentFilter === "upcoming") {
 
             filtered =
@@ -902,6 +1025,7 @@
                 );
 
         }
+
 
         else if (currentFilter === "overdue") {
 
@@ -913,12 +1037,16 @@
 
         }
 
+
         else if (currentFilter === "completed") {
 
             filtered =
-                filtered.filter(task => task.completed);
+                filtered.filter(
+                    task => task.completed
+                );
 
         }
+
 
         else if (currentFilter === "list") {
 
@@ -965,6 +1093,7 @@
             const element =
                 document.createElement("div");
 
+
             element.className =
                 "task" +
                 (task.completed ? " completed" : "");
@@ -974,6 +1103,7 @@
                 folders.find(
                     folder => folder.id === task.folderId
                 );
+
 
             const list =
                 folder?.lists.find(
@@ -1018,10 +1148,13 @@
             const checkbox =
                 element.querySelector(".task-checkbox");
 
+
             checkbox.addEventListener("change", () => {
 
                 task.completed =
                     checkbox.checked;
+
+                saveData();
 
                 renderTasks();
 
@@ -1051,11 +1184,14 @@
 
         currentModal = type;
 
+
         const background =
             document.getElementById("modalBackground");
 
+
         const title =
             document.getElementById("modalTitle");
+
 
         const content =
             document.getElementById("modalContent");
@@ -1065,7 +1201,9 @@
 
             title.textContent = "Nova tarefa";
 
+
             let options = "";
+
 
             folders.forEach(folder => {
 
@@ -1115,7 +1253,9 @@
 
             title.textContent = "Nova lista";
 
+
             let options = "";
+
 
             folders.forEach(folder => {
 
@@ -1152,6 +1292,7 @@
         if (type === "folder") {
 
             title.textContent = "Nova pasta";
+
 
             content.innerHTML = `
 
@@ -1192,7 +1333,9 @@
                     .value
                     .trim();
 
+
             if (!name) return;
+
 
             folders.push({
 
@@ -1216,18 +1359,22 @@
                     .value
                     .trim();
 
+
             const folderId =
                 Number(
                     document.getElementById("modalListFolder")
                         .value
                 );
 
+
             if (!name) return;
+
 
             const folder =
                 folders.find(
                     folder => folder.id === folderId
                 );
+
 
             if (folder) {
 
@@ -1238,6 +1385,7 @@
                     name: name
 
                 });
+
 
                 folder.open = true;
 
@@ -1253,22 +1401,28 @@
                     .value
                     .trim();
 
+
             const values =
                 document.getElementById("modalTaskList")
                     .value
                     .split("|");
 
+
             const folderId =
                 Number(values[0]);
 
+
             const listId =
                 Number(values[1]);
+
 
             const date =
                 document.getElementById("modalTaskDate")
                     .value;
 
+
             if (!name) return;
+
 
             tasks.push({
 
@@ -1289,6 +1443,11 @@
         }
 
 
+        /* Salva imediatamente após qualquer alteração */
+
+        saveData();
+
+
         closeModal();
 
         renderOrganization();
@@ -1301,6 +1460,8 @@
     /* =====================================================
        INICIALIZAÇÃO
        ===================================================== */
+
+    loadData();
 
     renderOrganization();
 
