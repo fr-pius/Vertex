@@ -14,8 +14,8 @@
         body {
             margin: 0;
             font-family: Arial, Helvetica, sans-serif;
-            background: #f5f5f5;
-            color: #222;
+            background: #102018;
+            color: #e8eee9;
         }
 
         /* =========================
@@ -34,8 +34,8 @@
 
         .sidebar {
             width: 270px;
-            background: #ffffff;
-            border-right: 1px solid #d8d8d8;
+            background: #142a20;
+            border-right: 1px solid #294536;
             display: flex;
             flex-direction: column;
             overflow-y: auto;
@@ -44,18 +44,19 @@
 
         .logo {
             padding: 24px 22px 20px;
-            border-bottom: 1px solid #e3e3e3;
+            border-bottom: 1px solid #294536;
         }
 
         .logo-title {
             font-size: 25px;
             font-weight: 700;
             margin: 0;
+            color: #f0f5f1;
         }
 
         .logo-subtitle {
             font-size: 13px;
-            color: #777;
+            color: #9db3a5;
             margin-top: 3px;
         }
 
@@ -67,7 +68,7 @@
             padding: 0 10px 8px;
             font-size: 11px;
             font-weight: 700;
-            color: #888;
+            color: #789181;
             text-transform: uppercase;
             letter-spacing: 0.08em;
         }
@@ -81,15 +82,16 @@
             text-align: left;
             font-size: 14px;
             cursor: pointer;
-            color: #333;
+            color: #d6e2da;
         }
 
         .sidebar-button:hover {
-            background: #f0f0f0;
+            background: #1d392b;
         }
 
         .sidebar-button.active {
-            background: #e8e8e8;
+            background: #28543d;
+            color: #ffffff;
             font-weight: 600;
         }
 
@@ -113,17 +115,17 @@
             cursor: pointer;
             text-align: left;
             font-size: 14px;
-            color: #333;
+            color: #d6e2da;
         }
 
         .folder-header:hover {
-            background: #f0f0f0;
+            background: #1d392b;
         }
 
         .folder-arrow {
             width: 15px;
             font-size: 11px;
-            color: #777;
+            color: #91a99a;
         }
 
         .folder-name {
@@ -143,17 +145,18 @@
             border-radius: 5px;
             text-align: left;
             font-size: 13px;
-            color: #555;
+            color: #aebfb4;
             cursor: pointer;
         }
 
         .list-button:hover {
-            background: #f1f1f1;
+            background: #1d392b;
+            color: #ffffff;
         }
 
         .sidebar-actions {
             margin-top: auto;
-            border-top: 1px solid #e3e3e3;
+            border-top: 1px solid #294536;
             padding: 12px;
         }
 
@@ -165,12 +168,13 @@
             text-align: left;
             border-radius: 6px;
             cursor: pointer;
-            color: #555;
+            color: #aebfb4;
             font-size: 13px;
         }
 
         .action-button:hover {
-            background: #f0f0f0;
+            background: #1d392b;
+            color: #ffffff;
         }
 
         /* =========================
@@ -182,12 +186,13 @@
             display: flex;
             flex-direction: column;
             min-width: 0;
+            background: #102018;
         }
 
         .topbar {
             height: 70px;
-            background: #ffffff;
-            border-bottom: 1px solid #d8d8d8;
+            background: #173024;
+            border-bottom: 1px solid #294536;
             display: flex;
             align-items: center;
             padding: 0 28px;
@@ -198,19 +203,26 @@
             font-size: 20px;
             font-weight: 600;
             flex: 1;
+            color: #edf3ef;
         }
 
         .search {
             width: 270px;
             padding: 9px 12px;
-            border: 1px solid #d2d2d2;
+            border: 1px solid #3b5a49;
+            background: #102018;
+            color: #e8eee9;
             border-radius: 6px;
             outline: none;
             font-size: 14px;
         }
 
+        .search::placeholder {
+            color: #789181;
+        }
+
         .search:focus {
-            border-color: #999;
+            border-color: #628c73;
         }
 
         .content {
@@ -225,7 +237,7 @@
 
         .empty-message {
             padding: 40px 10px;
-            color: #888;
+            color: #789181;
             font-size: 14px;
         }
 
@@ -234,8 +246,8 @@
            ========================= */
 
         .task {
-            background: #ffffff;
-            border: 1px solid #dedede;
+            background: #173024;
+            border: 1px solid #294536;
             border-radius: 7px;
             margin-bottom: 8px;
             padding: 14px 16px;
@@ -245,7 +257,8 @@
         }
 
         .task:hover {
-            border-color: #c5c5c5;
+            border-color: #456b55;
+            background: #193529;
         }
 
         .task-checkbox {
@@ -254,6 +267,7 @@
             margin-top: 2px;
             cursor: pointer;
             flex-shrink: 0;
+            accent-color: #4f815f;
         }
 
         .task-body {
@@ -264,6 +278,7 @@
         .task-name {
             font-size: 15px;
             font-weight: 500;
+            color: #e8eee9;
         }
 
         .task-meta {
@@ -275,20 +290,20 @@
 
         .task-tag {
             font-size: 11px;
-            color: #777;
-            background: #f1f1f1;
+            color: #a9bbaf;
+            background: #203b2d;
             padding: 3px 7px;
             border-radius: 4px;
         }
 
         .task-date {
             font-size: 11px;
-            color: #777;
+            color: #789181;
         }
 
         .completed .task-name {
             text-decoration: line-through;
-            color: #999;
+            color: #71867a;
         }
 
         /* =========================
@@ -298,7 +313,7 @@
         .modal-background {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 10, 5, 0.70);
             display: none;
             align-items: center;
             justify-content: center;
@@ -312,32 +327,42 @@
         .modal {
             width: 420px;
             max-width: calc(100vw - 30px);
-            background: white;
+            background: #173024;
+            border: 1px solid #365744;
             border-radius: 9px;
             padding: 24px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
         }
 
         .modal h2 {
             margin: 0 0 18px;
             font-size: 19px;
+            color: #edf3ef;
         }
 
         .modal label {
             display: block;
             margin-bottom: 6px;
             font-size: 13px;
-            color: #555;
+            color: #aebfb4;
         }
 
         .modal input,
         .modal select {
             width: 100%;
             padding: 10px;
-            border: 1px solid #ccc;
+            border: 1px solid #3b5a49;
+            background: #102018;
+            color: #e8eee9;
             border-radius: 5px;
             font-size: 14px;
             margin-bottom: 16px;
+        }
+
+        .modal input:focus,
+        .modal select:focus {
+            outline: none;
+            border-color: #628c73;
         }
 
         .modal-buttons {
@@ -347,17 +372,26 @@
         }
 
         .modal-button {
-            border: 1px solid #ccc;
-            background: white;
+            border: 1px solid #3b5a49;
+            background: #1d392b;
+            color: #d6e2da;
             padding: 8px 14px;
             border-radius: 5px;
             cursor: pointer;
         }
 
+        .modal-button:hover {
+            background: #28543d;
+        }
+
         .modal-button.primary {
-            background: #333;
+            background: #3d6b4c;
             color: white;
-            border-color: #333;
+            border-color: #3d6b4c;
+        }
+
+        .modal-button.primary:hover {
+            background: #4a7c5a;
         }
 
         /* =========================
@@ -365,6 +399,7 @@
            ========================= */
 
         @media (max-width: 700px) {
+
             .sidebar {
                 width: 220px;
             }
@@ -383,6 +418,7 @@
         }
 
         @media (max-width: 520px) {
+
             .sidebar {
                 width: 190px;
             }
@@ -840,8 +876,6 @@
         let filtered = [...tasks];
 
 
-        /* filtro principal */
-
         if (currentFilter === "all") {
 
             filtered =
@@ -897,8 +931,6 @@
 
         }
 
-
-        /* pesquisa */
 
         if (search) {
 
