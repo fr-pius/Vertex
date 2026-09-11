@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Alce Vertex</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f5f5;
+            color: #222;
+        }
+
+        /* =========================
+           ESTRUTURA PRINCIPAL
+           ========================= */
+
+        .app {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* =========================
+           BARRA LATERAL
+           ========================= */
+
+        .sidebar {
+            width: 270px;
+            background: #ffffff;
+            border-right: 1px solid #d8d8d8;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .logo {
+            padding: 24px 22px 20px;
+            border-bottom: 1px solid #e3e3e3;
+        }
+
+        .logo-title {
+            font-size: 25px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .logo-subtitle {
+            font-size: 13px;
+            color: #777;
+            margin-top: 3px;
+        }
+
+        .sidebar-section {
+            padding: 18px 12px 6px;
+        }
+
+        .section-title {
+            padding: 0 10px 8px;
+            font-size: 11px;
+            font-weight: 700;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .sidebar-button {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 9px 10px;
+            border-radius: 6px;
+            text-align: left;
+            font-size: 14px;
+            cursor: pointer;
+            color: #333;
+        }
+
+        .sidebar-button:hover {
+            background: #f0f0f0;
+        }
+
+        .sidebar-button.active {
+            background: #e8e8e8;
+            font-weight: 600;
+        }
+
+        .organization {
+            padding-bottom: 15px;
+        }
+
+        .folder {
+            margin-bottom: 3px;
+        }
+
+        .folder-header {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 8px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            text-align: left;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .folder-header:hover {
+            background: #f0f0f0;
+        }
+
+        .folder-arrow {
+            width: 15px;
+            font-size: 11px;
+            color: #777;
+        }
+
+        .folder-name {
+            flex: 1;
+        }
+
+        .folder-content {
+            padding-left: 24px;
+        }
+
+        .list-button {
+            display: block;
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 7px 10px;
+            border-radius: 5px;
+            text-align: left;
+            font-size: 13px;
+            color: #555;
+            cursor: pointer;
+        }
+
+        .list-button:hover {
+            background: #f1f1f1;
+        }
+
+        .sidebar-actions {
+            margin-top: auto;
+            border-top: 1px solid #e3e3e3;
+            padding: 12px;
+        }
+
+        .action-button {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 8px 10px;
+            text-align: left;
+            border-radius: 6px;
+            cursor: pointer;
+            color: #555;
+            font-size: 13px;
+        }
+
+        .action-button:hover {
+            background: #f0f0f0;
+        }
+
+        /* =========================
+           ÁREA PRINCIPAL
+           ========================= */
+
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        .topbar {
+            height: 70px;
+            background: #ffffff;
+            border-bottom: 1px solid #d8d8d8;
+            display: flex;
+            align-items: center;
+            padding: 0 28px;
+            gap: 18px;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            flex: 1;
+        }
+
+        .search {
+            width: 270px;
+            padding: 9px 12px;
+            border: 1px solid #d2d2d2;
+            border-radius: 6px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .search:focus {
+            border-color: #999;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 28px;
+        }
+
+        .task-list {
+            max-width: 900px;
+        }
+
+        .empty-message {
+            padding: 40px 10px;
+            color: #888;
+            font-size: 14px;
+        }
+
+        /* =========================
+           TAREFAS
+           ========================= */
+
+        .task {
+            background: #ffffff;
+            border: 1px solid #dedede;
+            border-radius: 7px;
+            margin-bottom: 8px;
+            padding: 14px 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .task:hover {
+            border-color: #c5c5c5;
+        }
+
+        .task-checkbox {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        .task-body {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .task-name {
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 7px;
+        }
+
+        .task-tag {
+            font-size: 11px;
+            color: #777;
+            background: #f1f1f1;
+            padding: 3px 7px;
+            border-radius: 4px;
+        }
+
+        .task-date {
+            font-size: 11px;
+            color: #777;
+        }
+
+        .completed .task-name {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        /* =========================
+           MODAL
+           ========================= */
+
+        .modal-background {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.35);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .modal-background.visible {
+            display: flex;
+        }
+
+        .modal {
+            width: 420px;
+            max-width: calc(100vw - 30px);
+            background: white;
+            border-radius: 9px;
+            padding: 24px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.18);
+        }
+
+        .modal h2 {
+            margin: 0 0 18px;
+            font-size: 19px;
+        }
+
+        .modal label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: #555;
+        }
+
+        .modal input,
+        .modal select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .modal-button {
+            border: 1px solid #ccc;
+            background: white;
+            padding: 8px 14px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .modal-button.primary {
+            background: #333;
+            color: white;
+            border-color: #333;
+        }
+
+        /* =========================
+           RESPONSIVO
+           ========================= */
+
+        @media (max-width: 700px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .topbar {
+                padding: 0 15px;
+            }
+
+            .content {
+                padding: 18px 15px;
+            }
+
+            .search {
+                width: 170px;
+            }
+        }
+
+        @media (max-width: 520px) {
+            .sidebar {
+                width: 190px;
+            }
+
+            .search {
+                width: 130px;
+            }
+
+            .page-title {
+                font-size: 17px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- =========================
+         BARRA LATERAL
+         ========================= -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            <div class="logo-title">Alce</div>
+            <div class="logo-subtitle">Vertex</div>
+        </div>
+
+        <div class="sidebar-section">
+
+            <div class="section-title">Tarefas</div>
+
+            <button class="sidebar-button active" data-filter="all">
+                Todas
+            </button>
+
+            <button class="sidebar-button" data-filter="today">
+                Hoje
+            </button>
+
+            <button class="sidebar-button" data-filter="upcoming">
+                Próximas
+            </button>
+
+            <button class="sidebar-button" data-filter="overdue">
+                Atrasadas
+            </button>
+
+            <button class="sidebar-button" data-filter="completed">
+                Concluídas
+            </button>
+
+        </div>
+
+        <div class="sidebar-section organization">
+
+            <div class="section-title">Organização</div>
+
+            <div id="organizationTree"></div>
+
+        </div>
+
+        <div class="sidebar-actions">
+
+            <button class="action-button" onclick="openModal('task')">
+                + Nova tarefa
+            </button>
+
+            <button class="action-button" onclick="openModal('list')">
+                + Nova lista
+            </button>
+
+            <button class="action-button" onclick="openModal('folder')">
+                + Nova pasta
+            </button>
+
+            <button class="action-button">
+                ⚙ Configurações
+            </button>
+
+        </div>
+
+    </aside>
+
+
+    <!-- =========================
+         ÁREA PRINCIPAL
+         ========================= -->
+
+    <main class="main">
+
+        <header class="topbar">
+
+            <div class="page-title" id="pageTitle">
+                Todas as tarefas
+            </div>
+
+            <input
+                type="search"
+                class="search"
+                id="searchInput"
+                placeholder="Pesquisar..."
+            >
+
+        </header>
+
+        <section class="content">
+
+            <div class="task-list" id="taskList"></div>
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<!-- =========================
+     MODAL
+     ========================= -->
+
+<div class="modal-background" id="modalBackground">
+
+    <div class="modal">
+
+        <h2 id="modalTitle">Nova tarefa</h2>
+
+        <div id="modalContent"></div>
+
+        <div class="modal-buttons">
+
+            <button
+                class="modal-button"
+                onclick="closeModal()"
+            >
+                Cancelar
+            </button>
+
+            <button
+                class="modal-button primary"
+                onclick="saveModal()"
+            >
+                Criar
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    /* =====================================================
+       DADOS INICIAIS
+       ===================================================== */
+
+    let folders = [
+        {
+            id: 1,
+            name: "Exemplo 1",
+            open: true,
+            lists: [
+                { id: 1, name: "Exemplo 1" },
+                { id: 2, name: "Exemplo 2" },
+                { id: 3, name: "Exemplo 3" }
+            ]
+        },
+        {
+            id: 2,
+            name: "Exemplo 2",
+            open: true,
+            lists: [
+                { id: 4, name: "Exemplo 1" },
+                { id: 5, name: "Exemplo 2" }
+            ]
+        },
+        {
+            id: 3,
+            name: "Exemplo 3",
+            open: false,
+            lists: [
+                { id: 6, name: "Exemplo 1" }
+            ]
+        }
+    ];
+
+
+    let tasks = [
+        {
+            id: 1,
+            name: "Exemplo 1",
+            folderId: 1,
+            listId: 1,
+            completed: false,
+            date: today()
+        },
+        {
+            id: 2,
+            name: "Exemplo 2",
+            folderId: 1,
+            listId: 2,
+            completed: false,
+            date: today()
+        },
+        {
+            id: 3,
+            name: "Exemplo 3",
+            folderId: 2,
+            listId: 4,
+            completed: false,
+            date: tomorrow()
+        },
+        {
+            id: 4,
+            name: "Exemplo 4",
+            folderId: 2,
+            listId: 5,
+            completed: false,
+            date: yesterday()
+        },
+        {
+            id: 5,
+            name: "Exemplo 5",
+            folderId: 3,
+            listId: 6,
+            completed: true,
+            date: yesterday()
+        }
+    ];
+
+
+    let currentFilter = "all";
+    let currentFolderFilter = null;
+    let currentListFilter = null;
+    let currentModal = null;
+
+
+    /* =====================================================
+       DATAS
+       ===================================================== */
+
+    function dateString(date) {
+
+        return date.toISOString().split("T")[0];
+
+    }
+
+    function today() {
+
+        const date = new Date();
+
+        return dateString(date);
+
+    }
+
+    function tomorrow() {
+
+        const date = new Date();
+
+        date.setDate(date.getDate() + 1);
+
+        return dateString(date);
+
+    }
+
+    function yesterday() {
+
+        const date = new Date();
+
+        date.setDate(date.getDate() - 1);
+
+        return dateString(date);
+
+    }
+
+
+    function formatDate(date) {
+
+        if (!date) return "";
+
+        const parts = date.split("-");
+
+        return `${parts[2]}/${parts[1]}/${parts[0]}`;
+
+    }
+
+
+    /* =====================================================
+       ÁRVORE DE ORGANIZAÇÃO
+       ===================================================== */
+
+    function renderOrganization() {
+
+        const container =
+            document.getElementById("organizationTree");
+
+        container.innerHTML = "";
+
+        folders.forEach(folder => {
+
+            const folderElement =
+                document.createElement("div");
+
+            folderElement.className = "folder";
+
+            const header =
+                document.createElement("button");
+
+            header.className = "folder-header";
+
+            header.onclick = () => {
+
+                folder.open = !folder.open;
+
+                renderOrganization();
+
+            };
+
+            const arrow =
+                folder.open ? "▼" : "▶";
+
+            header.innerHTML = `
+                <span class="folder-arrow">${arrow}</span>
+                <span class="folder-name">${folder.name}</span>
+            `;
+
+            folderElement.appendChild(header);
+
+
+            if (folder.open) {
+
+                const content =
+                    document.createElement("div");
+
+                content.className = "folder-content";
+
+                folder.lists.forEach(list => {
+
+                    const button =
+                        document.createElement("button");
+
+                    button.className = "list-button";
+
+                    button.textContent = list.name;
+
+                    button.onclick = () => {
+
+                        currentFilter = "list";
+                        currentFolderFilter = folder.id;
+                        currentListFilter = list.id;
+
+                        updateActiveSidebar();
+
+                        document.getElementById("pageTitle").textContent =
+                            `${folder.name} / ${list.name}`;
+
+                        renderTasks();
+
+                    };
+
+                    content.appendChild(button);
+
+                });
+
+                folderElement.appendChild(content);
+
+            }
+
+            container.appendChild(folderElement);
+
+        });
+
+    }
+
+
+    /* =====================================================
+       FILTROS
+       ===================================================== */
+
+    document.querySelectorAll(".sidebar-button")
+        .forEach(button => {
+
+            button.addEventListener("click", () => {
+
+                currentFilter =
+                    button.dataset.filter;
+
+                currentFolderFilter = null;
+                currentListFilter = null;
+
+                updateActiveSidebar();
+
+                const titles = {
+                    all: "Todas as tarefas",
+                    today: "Hoje",
+                    upcoming: "Próximas",
+                    overdue: "Atrasadas",
+                    completed: "Concluídas"
+                };
+
+                document.getElementById("pageTitle")
+                    .textContent = titles[currentFilter];
+
+                renderTasks();
+
+            });
+
+        });
+
+
+    function updateActiveSidebar() {
+
+        document.querySelectorAll(".sidebar-button")
+            .forEach(button => {
+
+                button.classList.remove("active");
+
+            });
+
+        if (currentFilter !== "list") {
+
+            const button =
+                document.querySelector(
+                    `.sidebar-button[data-filter="${currentFilter}"]`
+                );
+
+            if (button) {
+                button.classList.add("active");
+            }
+
+        }
+
+    }
+
+
+    /* =====================================================
+       TAREFAS
+       ===================================================== */
+
+    function renderTasks() {
+
+        const container =
+            document.getElementById("taskList");
+
+        const search =
+            document.getElementById("searchInput")
+                .value
+                .toLowerCase()
+                .trim();
+
+        let filtered = [...tasks];
+
+
+        /* filtro principal */
+
+        if (currentFilter === "all") {
+
+            filtered =
+                filtered.filter(task => !task.completed);
+
+        }
+
+        else if (currentFilter === "today") {
+
+            filtered =
+                filtered.filter(task =>
+                    !task.completed &&
+                    task.date === today()
+                );
+
+        }
+
+        else if (currentFilter === "upcoming") {
+
+            filtered =
+                filtered.filter(task =>
+                    !task.completed &&
+                    task.date > today()
+                );
+
+        }
+
+        else if (currentFilter === "overdue") {
+
+            filtered =
+                filtered.filter(task =>
+                    !task.completed &&
+                    task.date < today()
+                );
+
+        }
+
+        else if (currentFilter === "completed") {
+
+            filtered =
+                filtered.filter(task => task.completed);
+
+        }
+
+        else if (currentFilter === "list") {
+
+            filtered =
+                filtered.filter(task =>
+                    task.folderId === currentFolderFilter &&
+                    task.listId === currentListFilter &&
+                    !task.completed
+                );
+
+        }
+
+
+        /* pesquisa */
+
+        if (search) {
+
+            filtered =
+                filtered.filter(task =>
+                    task.name
+                        .toLowerCase()
+                        .includes(search)
+                );
+
+        }
+
+
+        container.innerHTML = "";
+
+
+        if (filtered.length === 0) {
+
+            container.innerHTML = `
+                <div class="empty-message">
+                    Nenhuma tarefa encontrada.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        filtered.forEach(task => {
+
+            const element =
+                document.createElement("div");
+
+            element.className =
+                "task" +
+                (task.completed ? " completed" : "");
+
+
+            const folder =
+                folders.find(
+                    folder => folder.id === task.folderId
+                );
+
+            const list =
+                folder?.lists.find(
+                    list => list.id === task.listId
+                );
+
+
+            element.innerHTML = `
+
+                <input
+                    type="checkbox"
+                    class="task-checkbox"
+                    ${task.completed ? "checked" : ""}
+                >
+
+                <div class="task-body">
+
+                    <div class="task-name">
+                        ${task.name}
+                    </div>
+
+                    <div class="task-meta">
+
+                        <span class="task-tag">
+                            ${folder ? folder.name : ""}
+                        </span>
+
+                        <span class="task-tag">
+                            ${list ? list.name : ""}
+                        </span>
+
+                        <span class="task-date">
+                            ${formatDate(task.date)}
+                        </span>
+
+                    </div>
+
+                </div>
+            `;
+
+
+            const checkbox =
+                element.querySelector(".task-checkbox");
+
+            checkbox.addEventListener("change", () => {
+
+                task.completed =
+                    checkbox.checked;
+
+                renderTasks();
+
+            });
+
+
+            container.appendChild(element);
+
+        });
+
+    }
+
+
+    /* =====================================================
+       PESQUISA
+       ===================================================== */
+
+    document.getElementById("searchInput")
+        .addEventListener("input", renderTasks);
+
+
+    /* =====================================================
+       MODAL
+       ===================================================== */
+
+    function openModal(type) {
+
+        currentModal = type;
+
+        const background =
+            document.getElementById("modalBackground");
+
+        const title =
+            document.getElementById("modalTitle");
+
+        const content =
+            document.getElementById("modalContent");
+
+
+        if (type === "task") {
+
+            title.textContent = "Nova tarefa";
+
+            let options = "";
+
+            folders.forEach(folder => {
+
+                folder.lists.forEach(list => {
+
+                    options += `
+                        <option value="${folder.id}|${list.id}">
+                            ${folder.name} / ${list.name}
+                        </option>
+                    `;
+
+                });
+
+            });
+
+
+            content.innerHTML = `
+
+                <label>Nome da tarefa</label>
+
+                <input
+                    id="modalTaskName"
+                    type="text"
+                    placeholder="Exemplo de tarefa"
+                >
+
+                <label>Lista</label>
+
+                <select id="modalTaskList">
+                    ${options}
+                </select>
+
+                <label>Data</label>
+
+                <input
+                    id="modalTaskDate"
+                    type="date"
+                    value="${today()}"
+                >
+
+            `;
+
+        }
+
+
+        if (type === "list") {
+
+            title.textContent = "Nova lista";
+
+            let options = "";
+
+            folders.forEach(folder => {
+
+                options += `
+                    <option value="${folder.id}">
+                        ${folder.name}
+                    </option>
+                `;
+
+            });
+
+
+            content.innerHTML = `
+
+                <label>Nome da lista</label>
+
+                <input
+                    id="modalListName"
+                    type="text"
+                    placeholder="Exemplo"
+                >
+
+                <label>Pasta</label>
+
+                <select id="modalListFolder">
+                    ${options}
+                </select>
+
+            `;
+
+        }
+
+
+        if (type === "folder") {
+
+            title.textContent = "Nova pasta";
+
+            content.innerHTML = `
+
+                <label>Nome da pasta</label>
+
+                <input
+                    id="modalFolderName"
+                    type="text"
+                    placeholder="Exemplo"
+                >
+
+            `;
+
+        }
+
+
+        background.classList.add("visible");
+
+    }
+
+
+    function closeModal() {
+
+        document.getElementById("modalBackground")
+            .classList.remove("visible");
+
+        currentModal = null;
+
+    }
+
+
+    function saveModal() {
+
+        if (currentModal === "folder") {
+
+            const name =
+                document.getElementById("modalFolderName")
+                    .value
+                    .trim();
+
+            if (!name) return;
+
+            folders.push({
+
+                id: Date.now(),
+
+                name: name,
+
+                open: true,
+
+                lists: []
+
+            });
+
+        }
+
+
+        if (currentModal === "list") {
+
+            const name =
+                document.getElementById("modalListName")
+                    .value
+                    .trim();
+
+            const folderId =
+                Number(
+                    document.getElementById("modalListFolder")
+                        .value
+                );
+
+            if (!name) return;
+
+            const folder =
+                folders.find(
+                    folder => folder.id === folderId
+                );
+
+            if (folder) {
+
+                folder.lists.push({
+
+                    id: Date.now(),
+
+                    name: name
+
+                });
+
+                folder.open = true;
+
+            }
+
+        }
+
+
+        if (currentModal === "task") {
+
+            const name =
+                document.getElementById("modalTaskName")
+                    .value
+                    .trim();
+
+            const values =
+                document.getElementById("modalTaskList")
+                    .value
+                    .split("|");
+
+            const folderId =
+                Number(values[0]);
+
+            const listId =
+                Number(values[1]);
+
+            const date =
+                document.getElementById("modalTaskDate")
+                    .value;
+
+            if (!name) return;
+
+            tasks.push({
+
+                id: Date.now(),
+
+                name: name,
+
+                folderId: folderId,
+
+                listId: listId,
+
+                completed: false,
+
+                date: date
+
+            });
+
+        }
+
+
+        closeModal();
+
+        renderOrganization();
+
+        renderTasks();
+
+    }
+
+
+    /* =====================================================
+       INICIALIZAÇÃO
+       ===================================================== */
+
+    renderOrganization();
+
+    renderTasks();
+
+</script>
+
+</body>
+</html>
