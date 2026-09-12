@@ -1168,38 +1168,23 @@ const defaultTasks = [
    ========================================================= */
 
 function migrateTask(task) {
+  if (!task.status) {
+    task.status = task.completed ? "Concluída" : "Pendente";
+  }
 
-    if (!task.status) {
+  if (!task.recurrence) {
+    task.recurrence = "Única";
+  }
 
-        task.status =
-            task.completed
-                ? "Concluída"
-                : "Pendente";
-    }
+  if (!Object.prototype.hasOwnProperty.call(task, "recurrenceDays")) {
+    task.recurrenceDays = null;
+  }
 
-    if (!task.recurrence) {
-        task.recurrence = "Única";
-    }
+  if (!Object.prototype.hasOwnProperty.call(task, "nextRecurrenceDate")) {
+    task.nextRecurrenceDate = null;
+  }
 
-    if (
-        !Object.prototype.hasOwnProperty.call(
-            task,
-            "recurrenceDays"
-        )
-    ) {
-        task.recurrenceDays = null;
-    }
-
-    if (
-        !Object.prototype.hasOwnProperty.call(
-            task,
-            "folderId"
-        )
-    ) {
-        task.folderId = null;
-    }
-
-    return task;
+  return task;
 }
 
 
