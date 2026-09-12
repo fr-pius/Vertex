@@ -29,15 +29,16 @@
        ========================= */
 
     .sidebar {
-    width: 270px;
-    background: #0b1b15;
-    border-right: 1px solid #294538;
-    padding: 24px 18px;
-    display: flex;
-    flex-direction: column;
-    flex-shrink: 0;
-    overflow-y: auto;
-}
+        width: 270px;
+        background: #0b1b15;
+        border-right: 1px solid #294538;
+        padding: 24px 18px;
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        overflow-y: auto;
+    }
+
     .brand {
         text-align: center;
         margin-bottom: 28px;
@@ -102,7 +103,7 @@
         display: flex;
         align-items: center;
         gap: 7px;
-        padding: 8px 9px;
+        padding: 8px 4px 8px 9px;
         border-radius: 7px;
         cursor: pointer;
         color: #c6d4cc;
@@ -117,6 +118,34 @@
         width: 12px;
         color: #7e9a8a;
         font-size: 11px;
+        flex-shrink: 0;
+    }
+
+    .folder-name {
+        flex: 1;
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .organization-menu-button {
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+        border: 0;
+        background: transparent;
+        color: #718c7d;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 18px;
+        line-height: 1;
+        padding: 0;
+    }
+
+    .organization-menu-button:hover {
+        background: #244638;
+        color: #ffffff;
     }
 
     .folder-lists {
@@ -124,17 +153,44 @@
         margin-top: 2px;
     }
 
+    .list-row {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        margin-bottom: 1px;
+    }
+
     .list-item {
+        flex: 1;
+        min-width: 0;
         padding: 7px 9px;
         color: #91a99c;
         border-radius: 6px;
         cursor: pointer;
         font-size: 13px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
     }
 
     .list-item:hover {
         background: #19372b;
         color: #dce7e1;
+    }
+
+    .list-row .organization-menu-button {
+        margin-right: 2px;
+    }
+
+    .standalone-list {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        margin-bottom: 1px;
+    }
+
+    .standalone-list .list-item {
+        padding-left: 9px;
     }
 
     .sidebar-bottom {
@@ -159,6 +215,43 @@
     .bottom-button:hover {
         background: #19372b;
         color: #ffffff;
+    }
+
+    /* =========================
+       MENU DE ORGANIZAÇÃO
+       ========================= */
+
+    .organization-menu {
+        position: fixed;
+        width: 165px;
+        background: #10251d;
+        border: 1px solid #3a594b;
+        border-radius: 8px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
+        z-index: 50;
+        padding: 5px;
+    }
+
+    .organization-menu button {
+        width: 100%;
+        border: 0;
+        background: transparent;
+        color: #c2d0c8;
+        padding: 9px 10px;
+        text-align: left;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 13px;
+    }
+
+    .organization-menu button:hover {
+        background: #1c3a2d;
+        color: #ffffff;
+    }
+
+    .organization-menu button.danger:hover {
+        background: #422b2b;
+        color: #f0c8c8;
     }
 
     /* =========================
@@ -294,8 +387,6 @@
         white-space: nowrap;
     }
 
-    /* Status: aspecto de estado */
-
     .tag-status {
         border: 1px solid #526d5e;
         background: #1b3328;
@@ -314,8 +405,6 @@
         border-color: #3c5146;
         color: #789184;
     }
-
-    /* Recorrência: aspecto diferente */
 
     .tag-recurrence {
         border: 0;
@@ -605,6 +694,7 @@
         </div>
 
         <div class="sidebar-section">
+
             <div class="sidebar-title">Tarefas</div>
 
             <button class="nav-item active" data-view="all" onclick="changeView('all', this)">
@@ -626,11 +716,15 @@
             <button class="nav-item" data-view="completed" onclick="changeView('completed', this)">
                 Concluídas
             </button>
+
         </div>
 
         <div class="sidebar-section">
+
             <div class="sidebar-title">Organização</div>
+
             <div id="organization"></div>
+
         </div>
 
         <div class="sidebar-bottom">
@@ -654,6 +748,7 @@
         </div>
 
     </aside>
+
 
     <!-- =========================
          MAIN
@@ -739,54 +834,110 @@
         <h2 id="taskModalTitle">Nova tarefa</h2>
 
         <div class="form-group">
-            <label for="modalTaskName">Nome da tarefa</label>
+
+            <label for="modalTaskName">
+                Nome da tarefa
+            </label>
+
             <input
                 id="modalTaskName"
                 type="text"
                 placeholder="Exemplo: Preparar relatório"
             >
+
         </div>
 
         <div class="form-group">
-            <label for="modalTaskFolder">Pasta</label>
-            <select id="modalTaskFolder" onchange="updateModalLists()"></select>
+
+            <label for="modalTaskFolder">
+                Pasta
+            </label>
+
+            <select
+                id="modalTaskFolder"
+                onchange="updateModalLists()"
+            ></select>
+
         </div>
 
         <div class="form-group">
-            <label for="modalTaskList">Lista</label>
+
+            <label for="modalTaskList">
+                Lista
+            </label>
+
             <select id="modalTaskList"></select>
+
         </div>
 
         <div class="form-group">
-            <label for="modalTaskStatus">Status</label>
+
+            <label for="modalTaskStatus">
+                Status
+            </label>
 
             <select id="modalTaskStatus">
-                <option value="Pendente">Pendente</option>
-                <option value="Projeto">Projeto</option>
-                <option value="Concluída">Concluída</option>
+
+                <option value="Pendente">
+                    Pendente
+                </option>
+
+                <option value="Projeto">
+                    Projeto
+                </option>
+
+                <option value="Concluída">
+                    Concluída
+                </option>
+
             </select>
+
         </div>
 
         <div class="form-group">
-            <label for="modalTaskRecurrence">Recorrência</label>
+
+            <label for="modalTaskRecurrence">
+                Recorrência
+            </label>
 
             <select
                 id="modalTaskRecurrence"
                 onchange="updateRecurrenceField()"
             >
-                <option value="Única">Única</option>
-                <option value="Diária">Diária</option>
-                <option value="Semanal">Semanal</option>
-                <option value="Mensal">Mensal</option>
-                <option value="Anual">Anual</option>
-                <option value="X dias">X dias</option>
+
+                <option value="Única">
+                    Única
+                </option>
+
+                <option value="Diária">
+                    Diária
+                </option>
+
+                <option value="Semanal">
+                    Semanal
+                </option>
+
+                <option value="Mensal">
+                    Mensal
+                </option>
+
+                <option value="Anual">
+                    Anual
+                </option>
+
+                <option value="X dias">
+                    X dias
+                </option>
+
             </select>
+
         </div>
 
         <div
             id="recurrenceDaysContainer"
             class="form-group hidden"
         >
+
             <label for="modalRecurrenceDays">
                 Intervalo em dias
             </label>
@@ -798,15 +949,20 @@
                 step="1"
                 placeholder="Exemplo: 15"
             >
+
         </div>
 
         <div class="form-group">
-            <label for="modalTaskDate">Data</label>
+
+            <label for="modalTaskDate">
+                Data
+            </label>
 
             <input
                 id="modalTaskDate"
                 type="date"
             >
+
         </div>
 
         <div class="modal-actions">
@@ -842,6 +998,7 @@ const STORAGE_KEY = "alceVertexDataV1";
 
 let folders = [];
 let tasks = [];
+let standaloneLists = [];
 
 let currentView = "all";
 let currentListId = null;
@@ -859,26 +1016,42 @@ let visibility = {
    ========================================================= */
 
 function formatDateInput(date) {
+
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
+
+    const month =
+        String(date.getMonth() + 1)
+            .padStart(2, "0");
+
+    const day =
+        String(date.getDate())
+            .padStart(2, "0");
 
     return `${year}-${month}-${day}`;
 }
+
 
 function today() {
     return formatDateInput(new Date());
 }
 
+
 function tomorrow() {
+
     const d = new Date();
+
     d.setDate(d.getDate() + 1);
+
     return formatDateInput(d);
 }
 
+
 function yesterday() {
+
     const d = new Date();
+
     d.setDate(d.getDate() - 1);
+
     return formatDateInput(d);
 }
 
@@ -888,10 +1061,12 @@ function yesterday() {
    ========================================================= */
 
 const defaultFolders = [
+
     {
         id: 1,
         name: "Exemplo 1",
         open: true,
+
         lists: [
             { id: 1, name: "Exemplo 1" },
             { id: 2, name: "Exemplo 2" },
@@ -903,6 +1078,7 @@ const defaultFolders = [
         id: 2,
         name: "Exemplo 2",
         open: true,
+
         lists: [
             { id: 4, name: "Exemplo 1" },
             { id: 5, name: "Exemplo 2" }
@@ -913,14 +1089,17 @@ const defaultFolders = [
         id: 3,
         name: "Exemplo 3",
         open: false,
+
         lists: [
             { id: 6, name: "Exemplo 1" }
         ]
     }
+
 ];
 
 
 const defaultTasks = [
+
     {
         id: 1,
         name: "Exemplo 1",
@@ -980,6 +1159,7 @@ const defaultTasks = [
         recurrenceDays: null,
         date: yesterday()
     }
+
 ];
 
 
@@ -990,17 +1170,33 @@ const defaultTasks = [
 function migrateTask(task) {
 
     if (!task.status) {
-        task.status = task.completed
-            ? "Concluída"
-            : "Pendente";
+
+        task.status =
+            task.completed
+                ? "Concluída"
+                : "Pendente";
     }
 
     if (!task.recurrence) {
         task.recurrence = "Única";
     }
 
-    if (!Object.prototype.hasOwnProperty.call(task, "recurrenceDays")) {
+    if (
+        !Object.prototype.hasOwnProperty.call(
+            task,
+            "recurrenceDays"
+        )
+    ) {
         task.recurrenceDays = null;
+    }
+
+    if (
+        !Object.prototype.hasOwnProperty.call(
+            task,
+            "folderId"
+        )
+    ) {
+        task.folderId = null;
     }
 
     return task;
@@ -1013,34 +1209,80 @@ function migrateTask(task) {
 
 function loadData() {
 
-    const saved = localStorage.getItem(STORAGE_KEY);
+    const saved =
+        localStorage.getItem(STORAGE_KEY);
 
     if (!saved) {
 
-        folders = JSON.parse(JSON.stringify(defaultFolders));
-        tasks = JSON.parse(JSON.stringify(defaultTasks));
+        folders =
+            JSON.parse(
+                JSON.stringify(defaultFolders)
+            );
+
+        tasks =
+            JSON.parse(
+                JSON.stringify(defaultTasks)
+            );
+
+        standaloneLists = [];
 
         saveData();
+
         return;
     }
 
     try {
 
-        const data = JSON.parse(saved);
+        const data =
+            JSON.parse(saved);
 
-        folders = data.folders || JSON.parse(JSON.stringify(defaultFolders));
+        folders =
+            data.folders ||
+            JSON.parse(
+                JSON.stringify(defaultFolders)
+            );
 
-        tasks = (data.tasks || JSON.parse(JSON.stringify(defaultTasks)))
-            .map(migrateTask);
+        tasks =
+            (
+                data.tasks ||
+                JSON.parse(
+                    JSON.stringify(defaultTasks)
+                )
+            ).map(migrateTask);
+
+        standaloneLists =
+            data.standaloneLists || [];
+
+        /*
+         * Compatibilidade:
+         * se a versão anterior ainda não possui
+         * standaloneLists, criamos a estrutura.
+         */
+
+        if (!Array.isArray(standaloneLists)) {
+            standaloneLists = [];
+        }
 
         saveData();
 
     } catch (error) {
 
-        console.error("Erro ao carregar dados:", error);
+        console.error(
+            "Erro ao carregar dados:",
+            error
+        );
 
-        folders = JSON.parse(JSON.stringify(defaultFolders));
-        tasks = JSON.parse(JSON.stringify(defaultTasks));
+        folders =
+            JSON.parse(
+                JSON.stringify(defaultFolders)
+            );
+
+        tasks =
+            JSON.parse(
+                JSON.stringify(defaultTasks)
+            );
+
+        standaloneLists = [];
 
         saveData();
     }
@@ -1050,12 +1292,56 @@ function loadData() {
 function saveData() {
 
     localStorage.setItem(
+
         STORAGE_KEY,
+
         JSON.stringify({
+
             folders,
+            standaloneLists,
             tasks
+
         })
     );
+}
+
+
+/* =========================================================
+   LOCALIZAR LISTA
+   ========================================================= */
+
+function findList(listId) {
+
+    for (const folder of folders) {
+
+        const list =
+            folder.lists.find(
+                item => item.id === listId
+            );
+
+        if (list) {
+
+            return {
+                list,
+                folder
+            };
+        }
+    }
+
+    const standalone =
+        standaloneLists.find(
+            item => item.id === listId
+        );
+
+    if (standalone) {
+
+        return {
+            list: standalone,
+            folder: null
+        };
+    }
+
+    return null;
 }
 
 
@@ -1065,74 +1351,904 @@ function saveData() {
 
 function renderOrganization() {
 
-    const container = document.getElementById("organization");
+    const container =
+        document.getElementById(
+            "organization"
+        );
 
     container.innerHTML = "";
 
+
+    /* =========================
+       PASTAS
+       ========================= */
+
     folders.forEach(folder => {
 
-        const folderElement = document.createElement("div");
-        folderElement.className = "folder";
+        const folderElement =
+            document.createElement("div");
 
-        const header = document.createElement("div");
-        header.className = "folder-header";
+        folderElement.className =
+            "folder";
 
-        const arrow = document.createElement("span");
-        arrow.className = "folder-arrow";
-        arrow.textContent = folder.open ? "▼" : "▶";
 
-        const name = document.createElement("span");
-        name.textContent = folder.name;
+        const header =
+            document.createElement("div");
+
+        header.className =
+            "folder-header";
+
+
+        const arrow =
+            document.createElement("span");
+
+        arrow.className =
+            "folder-arrow";
+
+        arrow.textContent =
+            folder.open
+                ? "▼"
+                : "▶";
+
+
+        const name =
+            document.createElement("span");
+
+        name.className =
+            "folder-name";
+
+        name.textContent =
+            folder.name;
+
+
+        const menuButton =
+            document.createElement("button");
+
+        menuButton.className =
+            "organization-menu-button";
+
+        menuButton.textContent =
+            "⋮";
+
+        menuButton.title =
+            "Ações da pasta";
+
 
         header.appendChild(arrow);
         header.appendChild(name);
+        header.appendChild(menuButton);
+
 
         header.onclick = () => {
 
-            folder.open = !folder.open;
+            folder.open =
+                !folder.open;
 
             saveData();
+
             renderOrganization();
         };
 
+
+        menuButton.onclick =
+            event => {
+
+                event.stopPropagation();
+
+                closeOrganizationMenus();
+
+                const menu =
+                    createFolderMenu(folder);
+
+                document.body.appendChild(menu);
+
+                positionOrganizationMenu(
+                    menu,
+                    menuButton
+                );
+            };
+
+
         folderElement.appendChild(header);
+
+
+        /* =========================
+           LISTAS DA PASTA
+           ========================= */
 
         if (folder.open) {
 
-            const listsContainer = document.createElement("div");
-            listsContainer.className = "folder-lists";
+            const listsContainer =
+                document.createElement("div");
+
+            listsContainer.className =
+                "folder-lists";
+
 
             folder.lists.forEach(list => {
 
-                const listElement = document.createElement("div");
-                listElement.className = "list-item";
-                listElement.textContent = list.name;
+                const row =
+                    createListRow(
+                        list
+                    );
 
-                listElement.onclick = event => {
-
-                    event.stopPropagation();
-
-                    currentListId = list.id;
-                    currentView = "list";
-
-                    document
-                        .querySelectorAll(".nav-item")
-                        .forEach(item => item.classList.remove("active"));
-
-                    document.getElementById("pageTitle").textContent =
-                        list.name;
-
-                    renderTasks();
-                };
-
-                listsContainer.appendChild(listElement);
+                listsContainer.appendChild(row);
             });
 
-            folderElement.appendChild(listsContainer);
+
+            folderElement.appendChild(
+                listsContainer
+            );
         }
 
-        container.appendChild(folderElement);
+
+        container.appendChild(
+            folderElement
+        );
     });
+
+
+    /* =========================
+       LISTAS SEM PASTA
+       ========================= */
+
+    standaloneLists.forEach(list => {
+
+        const row =
+            createStandaloneListRow(
+                list
+            );
+
+        container.appendChild(row);
+    });
+}
+
+
+/* =========================================================
+   LINHA DE LISTA
+   ========================================================= */
+
+function createListRow(list) {
+
+    const row =
+        document.createElement("div");
+
+    row.className =
+        "list-row";
+
+
+    const listElement =
+        document.createElement("div");
+
+    listElement.className =
+        "list-item";
+
+    listElement.textContent =
+        list.name;
+
+    listElement.title =
+        list.name;
+
+
+    listElement.onclick =
+        event => {
+
+            event.stopPropagation();
+
+            openList(list.id);
+        };
+
+
+    const menuButton =
+        document.createElement("button");
+
+    menuButton.className =
+        "organization-menu-button";
+
+    menuButton.textContent =
+        "⋮";
+
+    menuButton.title =
+        "Ações da lista";
+
+
+    menuButton.onclick =
+        event => {
+
+            event.stopPropagation();
+
+            closeOrganizationMenus();
+
+            const menu =
+                createListMenu(list);
+
+            document.body.appendChild(menu);
+
+            positionOrganizationMenu(
+                menu,
+                menuButton
+            );
+        };
+
+
+    row.appendChild(listElement);
+    row.appendChild(menuButton);
+
+    return row;
+}
+
+
+/* =========================================================
+   LISTA SEM PASTA
+   ========================================================= */
+
+function createStandaloneListRow(list) {
+
+    const row =
+        document.createElement("div");
+
+    row.className =
+        "standalone-list";
+
+
+    const listElement =
+        document.createElement("div");
+
+    listElement.className =
+        "list-item";
+
+    listElement.textContent =
+        list.name;
+
+    listElement.title =
+        list.name;
+
+
+    listElement.onclick =
+        event => {
+
+            event.stopPropagation();
+
+            openList(list.id);
+        };
+
+
+    const menuButton =
+        document.createElement("button");
+
+    menuButton.className =
+        "organization-menu-button";
+
+    menuButton.textContent =
+        "⋮";
+
+    menuButton.title =
+        "Ações da lista";
+
+
+    menuButton.onclick =
+        event => {
+
+            event.stopPropagation();
+
+            closeOrganizationMenus();
+
+            const menu =
+                createListMenu(list);
+
+            document.body.appendChild(menu);
+
+            positionOrganizationMenu(
+                menu,
+                menuButton
+            );
+        };
+
+
+    row.appendChild(listElement);
+    row.appendChild(menuButton);
+
+    return row;
+}
+
+
+/* =========================================================
+   ABRIR LISTA
+   ========================================================= */
+
+function openList(listId) {
+
+    currentListId =
+        listId;
+
+    currentView =
+        "list";
+
+
+    document
+        .querySelectorAll(".nav-item")
+        .forEach(item =>
+            item.classList.remove(
+                "active"
+            )
+        );
+
+
+    const result =
+        findList(listId);
+
+
+    if (result) {
+
+        document.getElementById(
+            "pageTitle"
+        ).textContent =
+            result.list.name;
+
+    } else {
+
+        document.getElementById(
+            "pageTitle"
+        ).textContent =
+            "Lista";
+    }
+
+
+    renderTasks();
+}
+
+
+/* =========================================================
+   MENU DA PASTA
+   ========================================================= */
+
+function createFolderMenu(folder) {
+
+    const menu =
+        document.createElement("div");
+
+    menu.className =
+        "organization-menu";
+
+
+    const editButton =
+        document.createElement("button");
+
+    editButton.textContent =
+        "Editar";
+
+
+    editButton.onclick =
+        event => {
+
+            event.stopPropagation();
+
+            closeOrganizationMenus();
+
+            editFolder(folder.id);
+        };
+
+
+    const deleteButton =
+        document.createElement("button");
+
+    deleteButton.className =
+        "danger";
+
+    deleteButton.textContent =
+        "Excluir";
+
+
+    deleteButton.onclick =
+        event => {
+
+            event.stopPropagation();
+
+            closeOrganizationMenus();
+
+            deleteFolder(folder.id);
+        };
+
+
+    menu.appendChild(
+        editButton
+    );
+
+    menu.appendChild(
+        deleteButton
+    );
+
+    return menu;
+}
+
+
+/* =========================================================
+   MENU DA LISTA
+   ========================================================= */
+
+function createListMenu(list) {
+
+    const menu =
+        document.createElement("div");
+
+    menu.className =
+        "organization-menu";
+
+
+    const editButton =
+        document.createElement("button");
+
+    editButton.textContent =
+        "Editar";
+
+
+    editButton.onclick =
+        event => {
+
+            event.stopPropagation();
+
+            closeOrganizationMenus();
+
+            editList(list.id);
+        };
+
+
+    const deleteButton =
+        document.createElement("button");
+
+    deleteButton.className =
+        "danger";
+
+    deleteButton.textContent =
+        "Excluir";
+
+
+    deleteButton.onclick =
+        event => {
+
+            event.stopPropagation();
+
+            closeOrganizationMenus();
+
+            deleteList(list.id);
+        };
+
+
+    menu.appendChild(
+        editButton
+    );
+
+    menu.appendChild(
+        deleteButton
+    );
+
+    return menu;
+}
+
+
+/* =========================================================
+   POSICIONAR MENU
+   ========================================================= */
+
+function positionOrganizationMenu(
+    menu,
+    button
+) {
+
+    const rect =
+        button.getBoundingClientRect();
+
+    menu.style.left =
+        `${rect.right + 5}px`;
+
+    menu.style.top =
+        `${rect.top}px`;
+}
+
+
+/* =========================================================
+   FECHAR MENUS DE ORGANIZAÇÃO
+   ========================================================= */
+
+function closeOrganizationMenus() {
+
+    document
+        .querySelectorAll(
+            ".organization-menu"
+        )
+        .forEach(menu =>
+            menu.remove()
+        );
+}
+
+
+/* =========================================================
+   EDITAR PASTA
+   ========================================================= */
+
+function editFolder(folderId) {
+
+    const folder =
+        folders.find(
+            item =>
+                item.id === folderId
+        );
+
+    if (!folder) return;
+
+
+    const newName =
+        prompt(
+            "Novo nome da pasta:",
+            folder.name
+        );
+
+
+    if (
+        newName === null ||
+        !newName.trim()
+    ) {
+        return;
+    }
+
+
+    folder.name =
+        newName.trim();
+
+
+    saveData();
+
+    renderOrganization();
+}
+
+
+/* =========================================================
+   EXCLUIR PASTA
+   ========================================================= */
+
+function deleteFolder(folderId) {
+
+    const folder =
+        folders.find(
+            item =>
+                item.id === folderId
+        );
+
+    if (!folder) return;
+
+
+    const lists =
+        folder.lists || [];
+
+
+    if (lists.length === 0) {
+
+        const confirmed =
+            confirm(
+                `Excluir a pasta "${folder.name}"?`
+            );
+
+        if (!confirmed) return;
+
+
+        folders =
+            folders.filter(
+                item =>
+                    item.id !== folderId
+            );
+
+        saveData();
+
+        renderOrganization();
+
+        return;
+    }
+
+
+    const choice =
+        prompt(
+
+            `A pasta "${folder.name}" contém ${lists.length} lista(s).\n\n` +
+
+            `Digite 1 para excluir a pasta E todas as suas listas e tarefas.\n\n` +
+
+            `Digite 2 para excluir somente a pasta e deixar as listas sem pasta.\n\n` +
+
+            `Digite 0 para cancelar.`
+
+        );
+
+
+    if (choice === "0" || choice === null) {
+        return;
+    }
+
+
+    const listIds =
+        lists.map(
+            list => list.id
+        );
+
+
+    /* =========================
+       EXCLUIR TUDO
+       ========================= */
+
+    if (choice === "1") {
+
+        tasks =
+            tasks.filter(
+                task =>
+                    !listIds.includes(
+                        task.listId
+                    )
+            );
+
+        folders =
+            folders.filter(
+                item =>
+                    item.id !== folderId
+            );
+
+
+        if (
+            currentView === "list" &&
+            listIds.includes(
+                currentListId
+            )
+        ) {
+
+            currentView = "all";
+            currentListId = null;
+
+            document.getElementById(
+                "pageTitle"
+            ).textContent =
+                "Todas";
+
+            document
+                .querySelectorAll(
+                    ".nav-item"
+                )
+                .forEach(item =>
+                    item.classList.remove(
+                        "active"
+                    )
+                );
+
+            const allButton =
+                document.querySelector(
+                    '.nav-item[data-view="all"]'
+                );
+
+            if (allButton) {
+                allButton.classList.add(
+                    "active"
+                );
+            }
+        }
+
+
+        saveData();
+
+        renderOrganization();
+        renderTasks();
+
+        return;
+    }
+
+
+    /* =========================
+       LIBERTAR LISTAS
+       ========================= */
+
+    if (choice === "2") {
+
+        lists.forEach(list => {
+
+            if (
+                !standaloneLists.some(
+                    item =>
+                        item.id === list.id
+                )
+            ) {
+
+                standaloneLists.push(
+                    list
+                );
+            }
+        });
+
+
+        tasks.forEach(task => {
+
+            if (
+                task.folderId === folderId
+            ) {
+
+                task.folderId = null;
+            }
+        });
+
+
+        folders =
+            folders.filter(
+                item =>
+                    item.id !== folderId
+            );
+
+
+        saveData();
+
+        renderOrganization();
+        renderTasks();
+
+        return;
+    }
+
+
+    alert(
+        "Opção inválida. A pasta não foi alterada."
+    );
+}
+
+
+/* =========================================================
+   EDITAR LISTA
+   ========================================================= */
+
+function editList(listId) {
+
+    const result =
+        findList(listId);
+
+    if (!result) return;
+
+
+    const newName =
+        prompt(
+            "Novo nome da lista:",
+            result.list.name
+        );
+
+
+    if (
+        newName === null ||
+        !newName.trim()
+    ) {
+        return;
+    }
+
+
+    result.list.name =
+        newName.trim();
+
+
+    saveData();
+
+    renderOrganization();
+
+
+    if (
+        currentView === "list" &&
+        currentListId === listId
+    ) {
+
+        document.getElementById(
+            "pageTitle"
+        ).textContent =
+            result.list.name;
+    }
+}
+
+
+/* =========================================================
+   EXCLUIR LISTA
+   ========================================================= */
+
+function deleteList(listId) {
+
+    const result =
+        findList(listId);
+
+    if (!result) return;
+
+
+    const taskCount =
+        tasks.filter(
+            task =>
+                task.listId === listId
+        ).length;
+
+
+    let message =
+        `Excluir a lista "${result.list.name}"?`;
+
+
+    if (taskCount > 0) {
+
+        message +=
+            `\n\nEsta lista possui ${taskCount} tarefa(s). Elas também serão excluídas.`;
+    }
+
+
+    const confirmed =
+        confirm(message);
+
+
+    if (!confirmed) return;
+
+
+    if (result.folder) {
+
+        result.folder.lists =
+            result.folder.lists.filter(
+                list =>
+                    list.id !== listId
+            );
+
+    } else {
+
+        standaloneLists =
+            standaloneLists.filter(
+                list =>
+                    list.id !== listId
+            );
+    }
+
+
+    tasks =
+        tasks.filter(
+            task =>
+                task.listId !== listId
+        );
+
+
+    if (
+        currentView === "list" &&
+        currentListId === listId
+    ) {
+
+        currentView = "all";
+        currentListId = null;
+
+
+        document.getElementById(
+            "pageTitle"
+        ).textContent =
+            "Todas";
+
+
+        document
+            .querySelectorAll(
+                ".nav-item"
+            )
+            .forEach(item =>
+                item.classList.remove(
+                    "active"
+                )
+            );
+
+
+        const allButton =
+            document.querySelector(
+                '.nav-item[data-view="all"]'
+            );
+
+
+        if (allButton) {
+
+            allButton.classList.add(
+                "active"
+            );
+        }
+    }
+
+
+    saveData();
+
+    renderOrganization();
+    renderTasks();
 }
 
 
@@ -1140,27 +2256,51 @@ function renderOrganization() {
    NAVEGAÇÃO
    ========================================================= */
 
-function changeView(view, element) {
+function changeView(
+    view,
+    element
+) {
 
-    currentView = view;
-    currentListId = null;
+    currentView =
+        view;
+
+    currentListId =
+        null;
+
 
     document
-        .querySelectorAll(".nav-item")
-        .forEach(item => item.classList.remove("active"));
+        .querySelectorAll(
+            ".nav-item"
+        )
+        .forEach(item =>
+            item.classList.remove(
+                "active"
+            )
+        );
 
-    element.classList.add("active");
+
+    element.classList.add(
+        "active"
+    );
+
 
     const titles = {
+
         all: "Todas",
         today: "Hoje",
         upcoming: "Próximas",
         overdue: "Atrasadas",
         completed: "Concluídas"
+
     };
 
-    document.getElementById("pageTitle").textContent =
-        titles[view] || "Tarefas";
+
+    document.getElementById(
+        "pageTitle"
+    ).textContent =
+        titles[view] ||
+        "Tarefas";
+
 
     renderTasks();
 }
@@ -1171,16 +2311,19 @@ function changeView(view, element) {
    ========================================================= */
 
 function isToday(date) {
+
     return date === today();
 }
 
 
 function isUpcoming(date) {
+
     return date > today();
 }
 
 
 function isOverdue(date) {
+
     return date < today();
 }
 
@@ -1189,48 +2332,75 @@ function getVisibleTasks() {
 
     let result = [];
 
+
     if (currentView === "all") {
 
-        result = tasks.filter(
-            task => task.status !== "Concluída"
-        );
+        result =
+            tasks.filter(
+                task =>
+                    task.status !==
+                    "Concluída"
+            );
 
-    } else if (currentView === "today") {
+    } else if (
+        currentView === "today"
+    ) {
 
-        result = tasks.filter(
-            task =>
-                task.status !== "Concluída" &&
-                isToday(task.date)
-        );
+        result =
+            tasks.filter(
+                task =>
+                    task.status !==
+                        "Concluída" &&
+                    isToday(task.date)
+            );
 
-    } else if (currentView === "upcoming") {
+    } else if (
+        currentView === "upcoming"
+    ) {
 
-        result = tasks.filter(
-            task =>
-                task.status !== "Concluída" &&
-                isUpcoming(task.date)
-        );
+        result =
+            tasks.filter(
+                task =>
+                    task.status !==
+                        "Concluída" &&
+                    isUpcoming(task.date)
+            );
 
-    } else if (currentView === "overdue") {
+    } else if (
+        currentView === "overdue"
+    ) {
 
-        result = tasks.filter(
-            task =>
-                task.status !== "Concluída" &&
-                isOverdue(task.date)
-        );
+        result =
+            tasks.filter(
+                task =>
+                    task.status !==
+                        "Concluída" &&
+                    isOverdue(task.date)
+            );
 
-    } else if (currentView === "completed") {
+    } else if (
+        currentView === "completed"
+    ) {
 
-        result = tasks.filter(
-            task => task.status === "Concluída"
-        );
+        result =
+            tasks.filter(
+                task =>
+                    task.status ===
+                    "Concluída"
+            );
 
-    } else if (currentView === "list") {
+    } else if (
+        currentView === "list"
+    ) {
 
-        result = tasks.filter(
-            task => task.listId === currentListId
-        );
+        result =
+            tasks.filter(
+                task =>
+                    task.listId ===
+                    currentListId
+            );
     }
+
 
     return result;
 }
@@ -1242,174 +2412,359 @@ function getVisibleTasks() {
 
 function renderTasks() {
 
-    const container = document.getElementById("tasks");
+    const container =
+        document.getElementById(
+            "tasks"
+        );
 
     container.innerHTML = "";
 
-    const visibleTasks = getVisibleTasks();
 
-    if (visibleTasks.length === 0) {
+    const visibleTasks =
+        getVisibleTasks();
 
-        const empty = document.createElement("div");
-        empty.className = "empty";
-        empty.textContent = "Nenhuma tarefa para mostrar.";
 
-        container.appendChild(empty);
+    if (
+        visibleTasks.length === 0
+    ) {
+
+        const empty =
+            document.createElement(
+                "div"
+            );
+
+        empty.className =
+            "empty";
+
+        empty.textContent =
+            "Nenhuma tarefa para mostrar.";
+
+
+        container.appendChild(
+            empty
+        );
+
         return;
     }
 
+
     visibleTasks.forEach(task => {
 
-        const taskElement = document.createElement("div");
-        taskElement.className = "task";
+        const taskElement =
+            document.createElement(
+                "div"
+            );
 
-        if (task.status === "Concluída") {
-            taskElement.classList.add("completed");
+        taskElement.className =
+            "task";
+
+
+        if (
+            task.status ===
+            "Concluída"
+        ) {
+
+            taskElement.classList.add(
+                "completed"
+            );
         }
+
 
         /* Checkbox */
 
-        const checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        checkbox.className = "task-checkbox";
-        checkbox.checked = task.status === "Concluída";
+        const checkbox =
+            document.createElement(
+                "input"
+            );
 
-        checkbox.onclick = event => {
-            event.stopPropagation();
-        };
+        checkbox.type =
+            "checkbox";
 
-        checkbox.onchange = () => {
+        checkbox.className =
+            "task-checkbox";
 
-            if (checkbox.checked) {
-
-                task.status = "Concluída";
-                task.completed = true;
-
-            } else {
-
-                task.status = "Pendente";
-                task.completed = false;
-            }
-
-            saveData();
-            renderTasks();
-        };
-
-        taskElement.appendChild(checkbox);
+        checkbox.checked =
+            task.status ===
+            "Concluída";
 
 
-        /* Corpo da tarefa */
+        checkbox.onclick =
+            event => {
 
-        const taskMain = document.createElement("div");
-        taskMain.className = "task-main";
-
-        taskMain.onclick = () => {
-            openTaskList(task);
-        };
+                event.stopPropagation();
+            };
 
 
-        const taskName = document.createElement("div");
-        taskName.className = "task-name";
-        taskName.textContent = task.name;
+        checkbox.onchange =
+            () => {
 
-        taskMain.appendChild(taskName);
+                if (
+                    checkbox.checked
+                ) {
+
+                    task.status =
+                        "Concluída";
+
+                    task.completed =
+                        true;
+
+                } else {
+
+                    task.status =
+                        "Pendente";
+
+                    task.completed =
+                        false;
+                }
 
 
-        /* Meta / etiquetas */
+                saveData();
 
-        const meta = document.createElement("div");
-        meta.className = "task-meta";
+                renderTasks();
+            };
+
+
+        taskElement.appendChild(
+            checkbox
+        );
+
+
+        /* Corpo */
+
+        const taskMain =
+            document.createElement(
+                "div"
+            );
+
+        taskMain.className =
+            "task-main";
+
+
+        taskMain.onclick =
+            () => {
+
+                openTaskList(task);
+            };
+
+
+        const taskName =
+            document.createElement(
+                "div"
+            );
+
+        taskName.className =
+            "task-name";
+
+        taskName.textContent =
+            task.name;
+
+
+        taskMain.appendChild(
+            taskName
+        );
+
+
+        /* Meta */
+
+        const meta =
+            document.createElement(
+                "div"
+            );
+
+        meta.className =
+            "task-meta";
 
 
         if (visibility.status) {
 
-            const statusTag = document.createElement("span");
+            const statusTag =
+                document.createElement(
+                    "span"
+                );
 
-            statusTag.className = "tag tag-status";
+            statusTag.className =
+                "tag tag-status";
 
-            if (task.status === "Projeto") {
-                statusTag.classList.add("projeto");
-            }
-
-            if (task.status === "Concluída") {
-                statusTag.classList.add("concluida");
-            }
-
-            statusTag.textContent = task.status;
-
-            meta.appendChild(statusTag);
-        }
-
-
-        if (visibility.recurrence) {
-
-            const recurrenceTag = document.createElement("span");
-
-            recurrenceTag.className = "tag tag-recurrence";
-
-            let recurrenceText = task.recurrence;
 
             if (
-                task.recurrence === "X dias" &&
-                task.recurrenceDays
+                task.status ===
+                "Projeto"
             ) {
-                recurrenceText =
-                    `↻ a cada ${task.recurrenceDays} dias`;
-            } else if (task.recurrence === "Diária") {
-                recurrenceText = "↻ diária";
-            } else if (task.recurrence === "Semanal") {
-                recurrenceText = "↻ semanal";
-            } else if (task.recurrence === "Mensal") {
-                recurrenceText = "↻ mensal";
-            } else if (task.recurrence === "Anual") {
-                recurrenceText = "↻ anual";
+
+                statusTag.classList.add(
+                    "projeto"
+                );
             }
 
-            recurrenceTag.textContent = recurrenceText;
 
-            meta.appendChild(recurrenceTag);
+            if (
+                task.status ===
+                "Concluída"
+            ) {
+
+                statusTag.classList.add(
+                    "concluida"
+                );
+            }
+
+
+            statusTag.textContent =
+                task.status;
+
+
+            meta.appendChild(
+                statusTag
+            );
         }
 
 
-        if (visibility.date && task.date) {
+        if (
+            visibility.recurrence
+        ) {
 
-            const dateTag = document.createElement("span");
+            const recurrenceTag =
+                document.createElement(
+                    "span"
+                );
 
-            dateTag.className = "task-date";
+            recurrenceTag.className =
+                "tag tag-recurrence";
 
-            dateTag.textContent = formatDisplayDate(task.date);
 
-            meta.appendChild(dateTag);
+            let recurrenceText =
+                task.recurrence;
+
+
+            if (
+                task.recurrence ===
+                    "X dias" &&
+                task.recurrenceDays
+            ) {
+
+                recurrenceText =
+                    `↻ a cada ${task.recurrenceDays} dias`;
+
+            } else if (
+                task.recurrence ===
+                "Diária"
+            ) {
+
+                recurrenceText =
+                    "↻ diária";
+
+            } else if (
+                task.recurrence ===
+                "Semanal"
+            ) {
+
+                recurrenceText =
+                    "↻ semanal";
+
+            } else if (
+                task.recurrence ===
+                "Mensal"
+            ) {
+
+                recurrenceText =
+                    "↻ mensal";
+
+            } else if (
+                task.recurrence ===
+                "Anual"
+            ) {
+
+                recurrenceText =
+                    "↻ anual";
+            }
+
+
+            recurrenceTag.textContent =
+                recurrenceText;
+
+
+            meta.appendChild(
+                recurrenceTag
+            );
         }
 
 
-        taskMain.appendChild(meta);
+        if (
+            visibility.date &&
+            task.date
+        ) {
 
-        taskElement.appendChild(taskMain);
+            const dateTag =
+                document.createElement(
+                    "span"
+                );
+
+            dateTag.className =
+                "task-date";
+
+            dateTag.textContent =
+                formatDisplayDate(
+                    task.date
+                );
 
 
-        /* Três pontinhos */
+            meta.appendChild(
+                dateTag
+            );
+        }
 
-        const menuButton = document.createElement("button");
 
-        menuButton.className = "task-menu-button";
-        menuButton.textContent = "⋮";
-        menuButton.title = "Ações da tarefa";
+        taskMain.appendChild(
+            meta
+        );
 
-        menuButton.onclick = event => {
+        taskElement.appendChild(
+            taskMain
+        );
 
-            event.stopPropagation();
 
-            closeAllTaskMenus();
+        /* Três pontos */
 
-            const menu = createTaskMenu(task);
+        const menuButton =
+            document.createElement(
+                "button"
+            );
 
-            taskElement.appendChild(menu);
-        };
+        menuButton.className =
+            "task-menu-button";
 
-        taskElement.appendChild(menuButton);
+        menuButton.textContent =
+            "⋮";
 
-        container.appendChild(taskElement);
+        menuButton.title =
+            "Ações da tarefa";
+
+
+        menuButton.onclick =
+            event => {
+
+                event.stopPropagation();
+
+                closeAllTaskMenus();
+
+                const menu =
+                    createTaskMenu(
+                        task
+                    );
+
+                taskElement.appendChild(
+                    menu
+                );
+            };
+
+
+        taskElement.appendChild(
+            menuButton
+        );
+
+
+        container.appendChild(
+            taskElement
+        );
     });
 }
 
@@ -1418,13 +2773,26 @@ function renderTasks() {
    DATA FORMATADA
    ========================================================= */
 
-function formatDisplayDate(dateString) {
+function formatDisplayDate(
+    dateString
+) {
 
-    if (!dateString) return "";
+    if (!dateString) {
+        return "";
+    }
 
-    const parts = dateString.split("-");
 
-    if (parts.length !== 3) return dateString;
+    const parts =
+        dateString.split("-");
+
+
+    if (
+        parts.length !== 3
+    ) {
+
+        return dateString;
+    }
+
 
     return `${parts[2]}/${parts[1]}/${parts[0]}`;
 }
@@ -1436,46 +2804,7 @@ function formatDisplayDate(dateString) {
 
 function openTaskList(task) {
 
-    currentListId = task.listId;
-    currentView = "list";
-
-    document
-        .querySelectorAll(".nav-item")
-        .forEach(item => item.classList.remove("active"));
-
-    let folderFound = null;
-    let listFound = null;
-
-    folders.forEach(folder => {
-
-        folder.lists.forEach(list => {
-
-            if (list.id === task.listId) {
-
-                folderFound = folder;
-                listFound = list;
-            }
-        });
-    });
-
-    if (folderFound && listFound) {
-
-        document.getElementById("pageTitle").textContent =
-            listFound.name;
-
-        if (!folderFound.open) {
-            folderFound.open = true;
-            saveData();
-        }
-
-    } else {
-
-        document.getElementById("pageTitle").textContent =
-            "Lista";
-    }
-
-    renderOrganization();
-    renderTasks();
+    openList(task.listId);
 }
 
 
@@ -1485,66 +2814,128 @@ function openTaskList(task) {
 
 function createTaskMenu(task) {
 
-    const menu = document.createElement("div");
-    menu.className = "task-menu";
+    const menu =
+        document.createElement(
+            "div"
+        );
 
-    const editButton = document.createElement("button");
-    editButton.textContent = "Editar";
-
-    editButton.onclick = event => {
-
-        event.stopPropagation();
-
-        closeAllTaskMenus();
-        openEditTaskModal(task.id);
-    };
-
-    menu.appendChild(editButton);
+    menu.className =
+        "task-menu";
 
 
-    const toggleButton = document.createElement("button");
+    const editButton =
+        document.createElement(
+            "button"
+        );
 
-    if (task.status === "Concluída") {
-        toggleButton.textContent = "Reabrir";
+    editButton.textContent =
+        "Editar";
+
+
+    editButton.onclick =
+        event => {
+
+            event.stopPropagation();
+
+            closeAllTaskMenus();
+
+            openEditTaskModal(
+                task.id
+            );
+        };
+
+
+    menu.appendChild(
+        editButton
+    );
+
+
+    const toggleButton =
+        document.createElement(
+            "button"
+        );
+
+
+    if (
+        task.status ===
+        "Concluída"
+    ) {
+
+        toggleButton.textContent =
+            "Reabrir";
+
     } else {
-        toggleButton.textContent = "Concluir";
+
+        toggleButton.textContent =
+            "Concluir";
     }
 
-    toggleButton.onclick = event => {
 
-        event.stopPropagation();
+    toggleButton.onclick =
+        event => {
 
-        if (task.status === "Concluída") {
-
-            task.status = "Pendente";
-            task.completed = false;
-
-        } else {
-
-            task.status = "Concluída";
-            task.completed = true;
-        }
-
-        saveData();
-        renderTasks();
-    };
-
-    menu.appendChild(toggleButton);
+            event.stopPropagation();
 
 
-    const deleteButton = document.createElement("button");
+            if (
+                task.status ===
+                "Concluída"
+            ) {
 
-    deleteButton.className = "danger";
-    deleteButton.textContent = "Excluir";
+                task.status =
+                    "Pendente";
 
-    deleteButton.onclick = event => {
+                task.completed =
+                    false;
 
-        event.stopPropagation();
+            } else {
 
-        deleteTask(task.id);
-    };
+                task.status =
+                    "Concluída";
 
-    menu.appendChild(deleteButton);
+                task.completed =
+                    true;
+            }
+
+
+            saveData();
+
+            renderTasks();
+        };
+
+
+    menu.appendChild(
+        toggleButton
+    );
+
+
+    const deleteButton =
+        document.createElement(
+            "button"
+        );
+
+    deleteButton.className =
+        "danger";
+
+    deleteButton.textContent =
+        "Excluir";
+
+
+    deleteButton.onclick =
+        event => {
+
+            event.stopPropagation();
+
+            deleteTask(
+                task.id
+            );
+        };
+
+
+    menu.appendChild(
+        deleteButton
+    );
+
 
     return menu;
 }
@@ -1553,116 +2944,212 @@ function createTaskMenu(task) {
 function closeAllTaskMenus() {
 
     document
-        .querySelectorAll(".task-menu")
-        .forEach(menu => menu.remove());
+        .querySelectorAll(
+            ".task-menu"
+        )
+        .forEach(menu =>
+            menu.remove()
+        );
 }
 
 
 /* =========================================================
-   EXCLUIR
+   EXCLUIR TAREFA
    ========================================================= */
 
 function deleteTask(taskId) {
 
-    const task = tasks.find(item => item.id === taskId);
+    const task =
+        tasks.find(
+            item =>
+                item.id === taskId
+        );
+
 
     if (!task) return;
 
-    const confirmed = confirm(
-        `Excluir a tarefa "${task.name}"?`
-    );
+
+    const confirmed =
+        confirm(
+            `Excluir a tarefa "${task.name}"?`
+        );
+
 
     if (!confirmed) return;
 
-    tasks = tasks.filter(item => item.id !== taskId);
+
+    tasks =
+        tasks.filter(
+            item =>
+                item.id !== taskId
+        );
+
 
     saveData();
+
     renderTasks();
 }
 
 
 /* =========================================================
-   MODAL
+   MODAL DE TAREFA
    ========================================================= */
 
 function openNewTaskModal() {
 
-    editingTaskId = null;
+    editingTaskId =
+        null;
 
-    document.getElementById("taskModalTitle").textContent =
+
+    document.getElementById(
+        "taskModalTitle"
+    ).textContent =
         "Nova tarefa";
 
-    document.getElementById("modalTaskName").value = "";
+
+    document.getElementById(
+        "modalTaskName"
+    ).value =
+        "";
+
 
     populateFolderSelect();
 
-    document.getElementById("modalTaskStatus").value =
+
+    document.getElementById(
+        "modalTaskStatus"
+    ).value =
         "Pendente";
 
-    document.getElementById("modalTaskRecurrence").value =
+
+    document.getElementById(
+        "modalTaskRecurrence"
+    ).value =
         "Única";
 
-    document.getElementById("modalRecurrenceDays").value =
+
+    document.getElementById(
+        "modalRecurrenceDays"
+    ).value =
         "";
 
-    document.getElementById("modalTaskDate").value =
+
+    document.getElementById(
+        "modalTaskDate"
+    ).value =
         today();
+
 
     updateRecurrenceField();
 
-    document.getElementById("taskModal").classList.remove("hidden");
+
+    document.getElementById(
+        "taskModal"
+    ).classList.remove(
+        "hidden"
+    );
 }
 
 
-function openEditTaskModal(taskId) {
+function openEditTaskModal(
+    taskId
+) {
 
-    const task = tasks.find(item => item.id === taskId);
+    const task =
+        tasks.find(
+            item =>
+                item.id === taskId
+        );
+
 
     if (!task) return;
 
-    editingTaskId = taskId;
 
-    document.getElementById("taskModalTitle").textContent =
+    editingTaskId =
+        taskId;
+
+
+    document.getElementById(
+        "taskModalTitle"
+    ).textContent =
         "Editar tarefa";
 
-    document.getElementById("modalTaskName").value =
+
+    document.getElementById(
+        "modalTaskName"
+    ).value =
         task.name;
+
 
     populateFolderSelect();
 
-    document.getElementById("modalTaskFolder").value =
-        String(task.folderId);
+
+    document.getElementById(
+        "modalTaskFolder"
+    ).value =
+        task.folderId === null ||
+        task.folderId === undefined
+            ? ""
+            : String(task.folderId);
+
 
     updateModalLists();
 
-    document.getElementById("modalTaskList").value =
+
+    document.getElementById(
+        "modalTaskList"
+    ).value =
         String(task.listId);
 
-    document.getElementById("modalTaskStatus").value =
+
+    document.getElementById(
+        "modalTaskStatus"
+    ).value =
         task.status;
 
-    document.getElementById("modalTaskRecurrence").value =
+
+    document.getElementById(
+        "modalTaskRecurrence"
+    ).value =
         task.recurrence;
 
-    document.getElementById("modalRecurrenceDays").value =
+
+    document.getElementById(
+        "modalRecurrenceDays"
+    ).value =
         task.recurrenceDays || "";
 
-    document.getElementById("modalTaskDate").value =
+
+    document.getElementById(
+        "modalTaskDate"
+    ).value =
         task.date || today();
+
 
     updateRecurrenceField();
 
-    document.getElementById("taskModal").classList.remove("hidden");
+
+    document.getElementById(
+        "taskModal"
+    ).classList.remove(
+        "hidden"
+    );
 }
 
 
 function closeModal() {
 
     document
-        .getElementById("taskModal")
-        .classList.add("hidden");
+        .getElementById(
+            "taskModal"
+        )
+        .classList.add(
+            "hidden"
+        );
 
-    editingTaskId = null;
+
+    editingTaskId =
+        null;
 }
 
 
@@ -1672,19 +3159,51 @@ function closeModal() {
 
 function populateFolderSelect() {
 
-    const select = document.getElementById("modalTaskFolder");
+    const select =
+        document.getElementById(
+            "modalTaskFolder"
+        );
+
 
     select.innerHTML = "";
 
+
+    const standaloneOption =
+        document.createElement(
+            "option"
+        );
+
+    standaloneOption.value =
+        "";
+
+    standaloneOption.textContent =
+        "Sem pasta";
+
+
+    select.appendChild(
+        standaloneOption
+    );
+
+
     folders.forEach(folder => {
 
-        const option = document.createElement("option");
+        const option =
+            document.createElement(
+                "option"
+            );
 
-        option.value = folder.id;
-        option.textContent = folder.name;
+        option.value =
+            folder.id;
 
-        select.appendChild(option);
+        option.textContent =
+            folder.name;
+
+
+        select.appendChild(
+            option
+        );
     });
+
 
     updateModalLists();
 }
@@ -1692,27 +3211,64 @@ function populateFolderSelect() {
 
 function updateModalLists() {
 
-    const folderId =
-        Number(document.getElementById("modalTaskFolder").value);
+    const folderValue =
+        document.getElementById(
+            "modalTaskFolder"
+        ).value;
 
-    const folder =
-        folders.find(item => item.id === folderId);
 
     const select =
-        document.getElementById("modalTaskList");
+        document.getElementById(
+            "modalTaskList"
+        );
+
 
     select.innerHTML = "";
 
-    if (!folder) return;
 
-    folder.lists.forEach(list => {
+    let lists = [];
 
-        const option = document.createElement("option");
 
-        option.value = list.id;
-        option.textContent = list.name;
+    if (folderValue === "") {
 
-        select.appendChild(option);
+        lists =
+            standaloneLists;
+
+    } else {
+
+        const folder =
+            folders.find(
+                item =>
+                    item.id ===
+                    Number(folderValue)
+            );
+
+
+        if (folder) {
+
+            lists =
+                folder.lists;
+        }
+    }
+
+
+    lists.forEach(list => {
+
+        const option =
+            document.createElement(
+                "option"
+            );
+
+        option.value =
+            list.id;
+
+        option.textContent =
+            list.name;
+
+
+        select.appendChild(
+            option
+        );
     });
 }
 
@@ -1720,18 +3276,31 @@ function updateModalLists() {
 function updateRecurrenceField() {
 
     const recurrence =
-        document.getElementById("modalTaskRecurrence").value;
+        document.getElementById(
+            "modalTaskRecurrence"
+        ).value;
+
 
     const container =
-        document.getElementById("recurrenceDaysContainer");
+        document.getElementById(
+            "recurrenceDaysContainer"
+        );
 
-    if (recurrence === "X dias") {
 
-        container.classList.remove("hidden");
+    if (
+        recurrence ===
+        "X dias"
+    ) {
+
+        container.classList.remove(
+            "hidden"
+        );
 
     } else {
 
-        container.classList.add("hidden");
+        container.classList.add(
+            "hidden"
+        );
     }
 }
 
@@ -1743,38 +3312,84 @@ function updateRecurrenceField() {
 function saveModal() {
 
     const name =
-        document.getElementById("modalTaskName")
-            .value
-            .trim();
+        document.getElementById(
+            "modalTaskName"
+        ).value.trim();
+
 
     if (!name) {
 
-        alert("Digite o nome da tarefa.");
+        alert(
+            "Digite o nome da tarefa."
+        );
+
         return;
     }
 
+
+    const folderValue =
+        document.getElementById(
+            "modalTaskFolder"
+        ).value;
+
+
     const folderId =
-        Number(document.getElementById("modalTaskFolder").value);
+        folderValue === ""
+            ? null
+            : Number(folderValue);
+
 
     const listId =
-        Number(document.getElementById("modalTaskList").value);
+        Number(
+            document.getElementById(
+                "modalTaskList"
+            ).value
+        );
+
+
+    if (!listId) {
+
+        alert(
+            "Selecione uma lista."
+        );
+
+        return;
+    }
+
 
     const status =
-        document.getElementById("modalTaskStatus").value;
+        document.getElementById(
+            "modalTaskStatus"
+        ).value;
+
 
     const recurrence =
-        document.getElementById("modalTaskRecurrence").value;
+        document.getElementById(
+            "modalTaskRecurrence"
+        ).value;
 
-    let recurrenceDays = null;
 
-    if (recurrence === "X dias") {
+    let recurrenceDays =
+        null;
+
+
+    if (
+        recurrence ===
+        "X dias"
+    ) {
 
         recurrenceDays =
             Number(
-                document.getElementById("modalRecurrenceDays").value
+                document.getElementById(
+                    "modalRecurrenceDays"
+                ).value
             );
 
-        if (!recurrenceDays || recurrenceDays < 1) {
+
+        if (
+            !recurrenceDays ||
+            recurrenceDays < 1
+        ) {
 
             alert(
                 "Informe um intervalo válido em dias."
@@ -1784,32 +3399,64 @@ function saveModal() {
         }
     }
 
+
     const date =
-        document.getElementById("modalTaskDate").value ||
+        document.getElementById(
+            "modalTaskDate"
+        ).value ||
         today();
 
 
-    /* Edição */
+    /* =========================
+       EDIÇÃO
+       ========================= */
 
-    if (editingTaskId !== null) {
+    if (
+        editingTaskId !== null
+    ) {
 
         const task =
-            tasks.find(item => item.id === editingTaskId);
+            tasks.find(
+                item =>
+                    item.id ===
+                    editingTaskId
+            );
+
 
         if (!task) return;
 
-        task.name = name;
-        task.folderId = folderId;
-        task.listId = listId;
-        task.status = status;
-        task.completed = status === "Concluída";
-        task.recurrence = recurrence;
-        task.recurrenceDays = recurrenceDays;
-        task.date = date;
+
+        task.name =
+            name;
+
+        task.folderId =
+            folderId;
+
+        task.listId =
+            listId;
+
+        task.status =
+            status;
+
+        task.completed =
+            status ===
+            "Concluída";
+
+        task.recurrence =
+            recurrence;
+
+        task.recurrenceDays =
+            recurrenceDays;
+
+        task.date =
+            date;
 
     }
 
-    /* Nova tarefa */
+
+    /* =========================
+       NOVA TAREFA
+       ========================= */
 
     else {
 
@@ -1823,7 +3470,9 @@ function saveModal() {
 
             listId,
 
-            completed: status === "Concluída",
+            completed:
+                status ===
+                "Concluída",
 
             status,
 
@@ -1841,6 +3490,7 @@ function saveModal() {
     closeModal();
 
     renderOrganization();
+
     renderTasks();
 }
 
@@ -1852,36 +3502,91 @@ function saveModal() {
 function toggleViewMenu() {
 
     document
-        .getElementById("viewMenu")
-        .classList.toggle("hidden");
+        .getElementById(
+            "viewMenu"
+        )
+        .classList.toggle(
+            "hidden"
+        );
 }
 
 
-function changeVisibility(type, value) {
+function changeVisibility(
+    type,
+    value
+) {
 
-    visibility[type] = value;
+    visibility[type] =
+        value;
 
     renderTasks();
 }
 
 
 /* =========================================================
-   NOVA LISTA / NOVA PASTA
+   NOVA LISTA
    ========================================================= */
 
 function openNewListModal() {
 
-    const name = prompt(
-        "Nome da nova lista:"
-    );
+    const name =
+        prompt(
+            "Nome da nova lista:"
+        );
 
-    if (!name || !name.trim()) return;
 
-    const folderName = prompt(
-        "Em qual pasta deseja criar a lista?"
-    );
+    if (
+        !name ||
+        !name.trim()
+    ) {
+        return;
+    }
 
-    if (!folderName || !folderName.trim()) return;
+
+    const folderName =
+        prompt(
+
+            "Em qual pasta deseja criar a lista?\n\n" +
+            "Digite o nome da pasta ou deixe vazio para criar a lista sem pasta."
+
+        );
+
+
+    /*
+     * Lista sem pasta
+     */
+
+    if (
+        folderName === null
+    ) {
+        return;
+    }
+
+
+    if (
+        !folderName.trim()
+    ) {
+
+        standaloneLists.push({
+
+            id: Date.now(),
+
+            name:
+                name.trim()
+        });
+
+
+        saveData();
+
+        renderOrganization();
+
+        return;
+    }
+
+
+    /*
+     * Lista dentro de pasta
+     */
 
     const folder =
         folders.find(
@@ -1890,47 +3595,79 @@ function openNewListModal() {
                 folderName.trim().toLowerCase()
         );
 
+
     if (!folder) {
 
-        alert("Pasta não encontrada.");
+        alert(
+            "Pasta não encontrada."
+        );
+
         return;
     }
+
 
     const newListId =
         Date.now();
 
+
     folder.lists.push({
-        id: newListId,
-        name: name.trim()
+
+        id:
+            newListId,
+
+        name:
+            name.trim()
     });
 
-    folder.open = true;
+
+    folder.open =
+        true;
+
 
     saveData();
+
     renderOrganization();
 }
 
 
+/* =========================================================
+   NOVA PASTA
+   ========================================================= */
+
 function openNewFolderModal() {
 
-    const name = prompt(
-        "Nome da nova pasta:"
-    );
+    const name =
+        prompt(
+            "Nome da nova pasta:"
+        );
 
-    if (!name || !name.trim()) return;
+
+    if (
+        !name ||
+        !name.trim()
+    ) {
+        return;
+    }
+
 
     folders.push({
 
-        id: Date.now(),
+        id:
+            Date.now(),
 
-        name: name.trim(),
+        name:
+            name.trim(),
 
-        open: true,
+        open:
+            true,
 
-        lists: []
+        lists:
+            []
     });
 
+
     saveData();
+
     renderOrganization();
 }
 
@@ -1951,25 +3688,58 @@ function showSettings() {
    FECHAR MENUS AO CLICAR FORA
    ========================================================= */
 
-document.addEventListener("click", event => {
+document.addEventListener(
+    "click",
+    event => {
 
-    const viewMenu =
-        document.getElementById("viewMenu");
+        const viewMenu =
+            document.getElementById(
+                "viewMenu"
+            );
 
-    const viewButton =
-        event.target.closest(".view-button");
 
-    if (
-        !event.target.closest(".view-menu") &&
-        !viewButton
-    ) {
-        viewMenu.classList.add("hidden");
+        const viewButton =
+            event.target.closest(
+                ".view-button"
+            );
+
+
+        if (
+            !event.target.closest(
+                ".view-menu"
+            ) &&
+            !viewButton
+        ) {
+
+            viewMenu.classList.add(
+                "hidden"
+            );
+        }
+
+
+        if (
+            !event.target.closest(
+                ".task-menu-button"
+            )
+        ) {
+
+            closeAllTaskMenus();
+        }
+
+
+        if (
+            !event.target.closest(
+                ".organization-menu"
+            ) &&
+            !event.target.closest(
+                ".organization-menu-button"
+            )
+        ) {
+
+            closeOrganizationMenus();
+        }
     }
-
-    if (!event.target.closest(".task-menu-button")) {
-        closeAllTaskMenus();
-    }
-});
+);
 
 
 /* =========================================================
