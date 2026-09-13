@@ -2551,32 +2551,50 @@ function renderTasks() {
 
 
         checkbox.onchange =
-            () => {
+    () => {
 
-                if (
-                    checkbox.checked
-                ) {
+        if (
+            checkbox.checked
+        ) {
 
-                    task.status =
-                        "Concluída";
+            task.status =
+                "Concluída";
 
-                    task.completed =
-                        true;
+            task.completed =
+                true;
 
-                } else {
+            if (
+                task.recurrence !==
+                "Única"
+            ) {
 
-                    task.status =
-                        "Pendente";
+                task.nextRecurrenceDate =
+                    calculateNextRecurrenceDate(
+                        task,
+                        task.date
+                    );
+            } else {
 
-                    task.completed =
-                        false;
-                }
+                task.nextRecurrenceDate =
+                    null;
+            }
 
+        } else {
 
-                saveData();
+            task.status =
+                "Pendente";
 
-                renderTasks();
-            };
+            task.completed =
+                false;
+
+            task.nextRecurrenceDate =
+                null;
+        }
+
+        saveData();
+
+        renderTasks();
+    };
 
 
         taskElement.appendChild(
