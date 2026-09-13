@@ -1257,6 +1257,46 @@ function calculateNextRecurrenceDate(task, baseDate = null) {
 
   return `${year}-${month}-${day}`;
 }
+
+   function processRecurrences() {
+
+    const today =
+        new Date()
+            .toISOString()
+            .split("T")[0];
+
+    let changed = false;
+
+    tasks.forEach(task => {
+
+        if (
+            task.status === "Concluída" &&
+            task.recurrence !== "Única" &&
+            task.nextRecurrenceDate &&
+            task.nextRecurrenceDate <= today
+        ) {
+
+            task.status =
+                "Pendente";
+
+            task.completed =
+                false;
+
+            task.date =
+                task.nextRecurrenceDate;
+
+            task.nextRecurrenceDate =
+                null;
+
+            changed = true;
+        }
+
+    });
+
+    if (changed) {
+        saveData();
+    }
+}
    
 /* =========================================================
    CARREGAR / SALVAR
