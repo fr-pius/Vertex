@@ -2390,14 +2390,28 @@ function getVisibleTasks() {
 
     if (currentView === "all") {
 
-        result =
-            tasks.filter(
-                task =>
-                    task.status !==
-                    "Concluída"
-            );
+    const activeTasks =
+        tasks.filter(
+            task =>
+                task.status !==
+                "Concluída"
+        );
 
-    } else if (
+    const recurringCompletedTasks =
+        tasks.filter(
+            task =>
+                task.status ===
+                "Concluída" &&
+                task.recurrence !==
+                "Única"
+        );
+
+    result = [
+        ...activeTasks,
+        ...recurringCompletedTasks
+    ];
+
+} else if (
         currentView === "today"
     ) {
 
