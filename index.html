@@ -806,6 +806,19 @@
                             Data
                         </label>
 
+                                               <label class="view-option">
+
+                            <input
+                                type="checkbox"
+                                id="showDescription"
+                                checked
+                                onchange="changeVisibility('description', this.checked)"
+                            >
+
+                            Descrição
+
+                        </label>   
+
                     </div>
 
                 </div>
@@ -2689,21 +2702,43 @@ function renderTasks() {
 
 
         const taskName =
-            document.createElement(
-                "div"
-            );
+    document.createElement(
+        "div"
+    );
 
-        taskName.className =
-            "task-name";
+taskName.className =
+    "task-name";
 
-        taskName.textContent =
-            task.name;
+taskName.textContent =
+    task.name;
+
+taskMain.appendChild(
+    taskName
+);
 
 
-        taskMain.appendChild(
-            taskName
+/* Descrição */
+
+if (
+    visibility.description &&
+    task.description
+) {
+
+    const taskDescription =
+        document.createElement(
+            "div"
         );
 
+    taskDescription.className =
+        "task-description";
+
+    taskDescription.textContent =
+        task.description;
+
+    taskMain.appendChild(
+        taskDescription
+    );
+}
 
         /* Meta */
 
