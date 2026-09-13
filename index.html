@@ -3614,6 +3614,9 @@ function saveModal() {
         task.name =
             name;
 
+               task.description =
+            description;
+
         task.folderId =
             folderId;
 
@@ -3645,11 +3648,14 @@ function saveModal() {
 
     else {
 
-        tasks.push({
+                tasks.push({
 
-            id: Date.now(),
+            id:
+                Date.now(),
 
             name,
+
+            description,
 
             folderId,
 
