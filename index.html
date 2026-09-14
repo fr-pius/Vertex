@@ -3753,6 +3753,11 @@ function changeVisibility(
     visibility[type] =
         value;
 
+    localStorage.setItem(
+        "alceVertexVisibilityV1",
+        JSON.stringify(visibility)
+    );
+
     renderTasks();
 }
 
@@ -3975,12 +3980,45 @@ document.addEventListener(
     }
 );
 
+function loadVisibility() {
 
+    const savedVisibility =
+        localStorage.getItem(
+            "alceVertexVisibilityV1"
+        );
+
+    if (savedVisibility) {
+
+        try {
+
+            const parsedVisibility =
+                JSON.parse(
+                    savedVisibility
+                );
+
+            visibility = {
+                ...visibility,
+                ...parsedVisibility
+            };
+
+        } catch (error) {
+
+            console.error(
+                "Erro ao carregar preferências de visualização:",
+                error
+            );
+
+        }
+    }
+}
+   
 /* =========================================================
    INICIALIZAÇÃO
    ========================================================= */
 
 loadData();
+
+loadVisibility();
 
 processRecurrences();
 
