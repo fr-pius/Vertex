@@ -4010,6 +4010,26 @@ function loadVisibility() {
 
         }
     }
+
+    document.getElementById(
+        "showStatus"
+    ).checked =
+        visibility.status;
+
+    document.getElementById(
+        "showRecurrence"
+    ).checked =
+        visibility.recurrence;
+
+    document.getElementById(
+        "showDate"
+    ).checked =
+        visibility.date;
+
+    document.getElementById(
+        "showDescription"
+    ).checked =
+        visibility.description;
 }
    
 /* =========================================================
