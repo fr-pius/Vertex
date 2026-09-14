@@ -3790,6 +3790,10 @@ function openNewListModal() {
 
         );
 
+    const description =
+       prompt(
+        "Descrição da lista (opcional):"
+       );
 
     /*
      * Lista sem pasta
@@ -3808,11 +3812,17 @@ function openNewListModal() {
 
         standaloneLists.push({
 
-            id: Date.now(),
+    id: Date.now(),
 
-            name:
-                name.trim()
-        });
+    name:
+        name.trim(),
+
+    description:
+        description
+            ? description.trim()
+            : ""
+
+});
 
 
         saveData();
@@ -3851,12 +3861,17 @@ function openNewListModal() {
 
     folder.lists.push({
 
-        id:
-            newListId,
+    id:
+        newListId,
 
-        name:
-            name.trim()
-    });
+    name:
+        name.trim(),
+
+    description:
+        description
+            ? description.trim()
+            : ""
+});
 
 
     folder.open =
