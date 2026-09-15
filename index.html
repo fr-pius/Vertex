@@ -1756,11 +1756,36 @@ function createStandaloneListRow(list) {
     listElement.className =
         "list-item";
 
-    listElement.textContent =
-        list.name;
+    const listName =
+    document.createElement("div");
 
-    listElement.title =
-        list.name;
+listName.className =
+    "list-name";
+
+listName.textContent =
+    list.name;
+
+
+const listDescription =
+    document.createElement("div");
+
+listDescription.className =
+    "list-description";
+
+listDescription.textContent =
+    list.description || "";
+
+
+listElement.appendChild(
+    listName
+);
+
+listElement.appendChild(
+    listDescription
+);
+
+listElement.title =
+    list.name;
 
 
     listElement.onclick =
