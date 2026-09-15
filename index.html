@@ -285,6 +285,13 @@
         color: #e3ebe6;
     }
 
+   .page-description {
+    margin-top: 4px;
+    color: #718b7d;
+    font-size: 13px;
+    line-height: 1.4;
+    }
+   
     .topbar-actions {
         display: flex;
         align-items: center;
@@ -1843,18 +1850,28 @@ function openList(listId) {
 
     if (result) {
 
-        document.getElementById(
-            "pageTitle"
-        ).textContent =
-            result.list.name;
+    document.getElementById(
+        "pageTitle"
+    ).textContent =
+        result.list.name;
 
-    } else {
+    document.getElementById(
+        "pageDescription"
+    ).textContent =
+        result.list.description || "";
 
-        document.getElementById(
-            "pageTitle"
-        ).textContent =
-            "Lista";
-    }
+} else {
+
+    document.getElementById(
+        "pageTitle"
+    ).textContent =
+        "Lista";
+
+    document.getElementById(
+        "pageDescription"
+    ).textContent =
+        "";
+}
 
 
     renderTasks();
